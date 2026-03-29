@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>مشاهدة الفيديو - GameVault</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <script src="js/theme.js"></script>
+  <style>
+    .v-main-watch { display: grid; grid-template-columns: 1fr 350px; gap: 30px; padding: 30px; }
+    .video-wrapper { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.4); border: 1px solid var(--border); margin-bottom: 25px; }
+    .video-wrapper iframe { width: 100%; height: 100%; border: none; }
+    .video-details-header { padding-bottom: 25px; border-bottom: 1px solid var(--border); margin-bottom: 25px; }
+    .video-details-header h1 { font-size: 1.8rem; font-weight: 800; color: #fff; margin-bottom: 15px; line-height: 1.3; }
+    .video-meta-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+    .channel-info { display: flex; align-items: center; gap: 15px; }
+    .channel-img { width: 48px; height: 48px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.2rem; }
+    .channel-name { font-weight: 700; color: #fff; font-size: 1.05rem; }
+    .channel-sub { font-size: 0.85rem; color: var(--text-muted); }
+    .video-description { background: rgba(255,255,255,0.03); padding: 20px; border-radius: 16px; line-height: 1.6; color: var(--text-dim); }
+    .suggestions-area { display: flex; flex-direction: column; gap: 10px; }
+    .suggestions-header { 
+      font-weight: 800; 
+      color: #fff; 
+      margin-bottom: 15px; 
+      font-size: 1.15rem; 
+      position: relative;
+      padding-bottom: 10px;
+    }
+    .suggestions-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 40px;
+      height: 3px;
+      background: var(--gradient-primary);
+      border-radius: 10px;
+    }
+    .suggested-card { 
+      display: flex; 
+      gap: 15px; 
+      cursor: pointer; 
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+      padding: 10px;
+      border-radius: 16px;
+      border: 1px solid transparent;
+    }
+    .suggested-card:hover { 
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+      transform: translateX(-5px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    .suggested-thumb { 
+      width: 140px; 
+      min-width: 140px;
+      aspect-ratio: 16/9; 
+      border-radius: 12px; 
+      background-size: cover; 
+      background-position: center; 
+      position: relative; 
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    .suggested-info { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+    .suggested-title { 
+      font-size: 0.9rem; 
+      font-weight: 700; 
+      color: #fff; 
+      margin-bottom: 6px; 
+      line-height: 1.4;
+      display: -webkit-box;
+      line-clamp: 2;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .suggested-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .suggested-meta span:first-child { 
+      color: var(--primary-light); 
+      font-weight: 600; 
+      text-transform: uppercase;
+      font-size: 0.7rem;
+    }
+    
+    .light-mode .suggested-card:hover { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.05); }
+    .light-mode .suggested-title { color: #1e293b; }
+    
+    @media (max-width: 1200px) { .v-main-watch { grid-template-columns: 1fr; } }
+    @media (max-width: 768px) {
+      .v-main-watch { padding: 15px; gap: 20px; }
+      .video-wrapper { border-radius: 12px; margin-bottom: 15px; border: none; }
+      .video-details-header h1 { font-size: 1.35rem; }
+      .suggested-card { padding: 8px; gap: 12px; }
+      .suggested-thumb { width: 120px; min-width: 120px; border-radius: 8px; }
+      .suggested-title { font-size: 0.85rem; }
+      .suggested-meta { font-size: 0.7rem; }
+      .suggestions-header { font-size: 1.05rem; }
+    }
+    .light-mode .video-details-header h1, .light-mode .channel-name, .light-mode .suggestions-header { color: #1e293b; }
+    
+    /* Video Actions */
+    .video-actions-container { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
+    .v-action-group { display: flex; align-items: center; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 50px; overflow: hidden; backdrop-filter: blur(8px); }
+    .v-action-btn { background: transparent; border: none; color: #fff; padding: 10px 16px; font-size: 0.95rem; font-family: 'Exo 2', sans-serif; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; }
+    .v-action-btn:hover { background: rgba(255,255,255,0.1); }
+    .v-action-btn.liked { color: var(--primary-light); }
+    .v-action-btn.disliked { color: var(--red); }
+    .v-action-divider { width: 1px; height: 20px; background: rgba(255,255,255,0.15); }
+    .v-view-badge { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 50px; padding: 10px 16px; color: #fff; font-size: 0.95rem; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+    
+    .light-mode .v-action-group, .light-mode .v-view-badge { background: #fff; border-color: rgba(0,0,0,0.1); color: #1e293b; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
+    .light-mode .v-action-btn { color: #1e293b; }
+    .light-mode .v-action-btn:hover { background: rgba(0,0,0,0.04); }
+    .light-mode .v-action-divider { background: rgba(0,0,0,0.1); }
+  </style>
+</head>
+<body>
+
+  <div class="main-layout">
+    <!-- Sidebar -->
+    <aside class="g-sidebar">
+      <a href="index.html" class="g-logo">
+        <i class="fas fa-cubes"></i>
+        <span class="g-logo-text site-brand-name">GameVault</span>
+      </a>
+
+      <div class="nav-search" style="margin-bottom: 30px; width: 100%;">
+        <input type="text" id="main-search" placeholder="ابحث عن لعبة..." onkeydown="if(event.key==='Enter') globalSearch(this.value)" style="width:100%" />
+        <i class="fas fa-search nav-search-icon" style="left: 15px; right: auto; cursor:pointer;" onclick="globalSearch(document.getElementById('main-search').value)"></i>
+      </div>
+      <ul class="g-nav">
+        <li><a href="index.html" class="g-nav-link"><i class="fas fa-home"></i> الرئيسية</a></li>
+        <li><a href="videos.html" class="g-nav-link active"><i class="fas fa-play-circle"></i> الفيديوهات</a></li>
+        <li><a href="library.html" class="g-nav-link"><i class="fas fa-gamepad"></i> المكتبة</a></li>
+        <li><a href="upcoming.html" class="g-nav-link"><i class="fas fa-calendar-alt"></i> قادمة قريباً</a></li>
+        <li style="margin: 10px 0; border-bottom: 1px solid var(--border); opacity: 0.5;"></li>
+        <li><a href="profile.html" class="g-nav-link" id="nav-user-link" style="display:none; position:relative;"><i class="fas fa-user-circle"></i> ملفي الشخصي <span class="nav-notif-badge" style="position:absolute; top:50%; left:20px; transform:translateY(-50%); background:#ef4444; color:white; width:18px; height:18px; border-radius:50%; font-size:0.7rem; display:none; align-items:center; justify-content:center; font-weight:700; border:2px solid var(--bg-card);">0</span></a></li>
+        <li><a href="auth.html" class="g-nav-link" id="nav-auth-btn" style="display:none"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</a></li>
+        <li><a href="#" class="g-nav-link" id="nav-logout-btn" onclick="logout(); return false;" style="display:none; color:#f87171"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a></li>
+        <li style="margin: 10px 0; border-bottom: 1px solid var(--border); opacity: 0.5;"></li>
+        <li><a href="submit-game.html" class="g-nav-link" id="nav-submit-btn" style="display:none"><i class="fas fa-upload"></i> أرسل لعبتك</a></li>
+        <li><a href="dashboard.html" class="g-nav-link" id="nav-dash-btn" style="display:none"><i class="fas fa-sliders-h"></i> لوحة التحكم</a></li>
+      </ul>
+      <div class="g-theme-trigger" id="theme-toggle">
+        <i class="fas fa-moon"></i>
+        <span>تبديل الوضع</span>
+      </div>
+    </aside>
+
+    <!-- Content -->
+    <div class="content-wrapper">
+      <main class="v-main-watch" id="watch-grid">
+        <div class="player-area">
+          <div id="video-container" class="video-wrapper">
+            <div style="display:flex;align-items:center;justify-content:center;height:100%"><i class="fas fa-spinner fa-spin fa-2x"></i></div>
+          </div>
+          <div class="video-details-header">
+            <h1 id="video-title">تحميل...</h1>
+            <div class="video-meta-bar">
+              <div class="channel-info">
+                <div class="channel-img"><i class="fas fa-gamepad"></i></div>
+                <div><div class="channel-name" id="game-author">اسم اللعبة</div><div class="channel-sub" id="game-cat">تصنيف</div></div>
+              </div>
+              <div class="video-actions-container">
+                <div class="v-action-group">
+                  <button class="v-action-btn" id="btn-like" onclick="toggleLike()"><i class="far fa-thumbs-up" id="like-icon"></i> <span id="like-count">0</span></button>
+                  <div class="v-action-divider"></div>
+                  <button class="v-action-btn" id="btn-dislike" onclick="toggleDislike()"><i class="far fa-thumbs-down" id="dislike-icon"></i></button>
+                </div>
+                <div class="v-view-badge"><i class="fas fa-eye" style="color:var(--text-muted)"></i> <span id="view-count">0</span></div>
+                <button class="btn-download" id="btn-view-game" style="padding:10px 20px; font-size:0.9rem; border:none;">
+                  <i class="fas fa-external-link-alt"></i> صفحة اللعبة
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="video-description" id="video-desc">جاري التحميل...</div>
+        </div>
+        <div class="suggestions-area">
+          <div class="suggestions-header"><i class="fas fa-video"></i> فيديوهات مقترحة</div>
+          <div id="suggestions-list"></div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+  <!-- Mobile Search Overlay -->
+  <div class="mobile-search-overlay" id="mobile-search-overlay" onclick="closeMobileSearch(event)">
+    <div class="mobile-search-box">
+      <div class="mobile-search-inner" onclick="event.stopPropagation()">
+        <i class="fas fa-search" style="color:var(--text-muted)"></i>
+        <input type="text" id="mobile-search-input" placeholder="ابحث عن لعبة..." onkeydown="if(event.key==='Enter') { if(typeof globalSearch === 'function') globalSearch(this.value); else window.location.href='library.html?search='+encodeURIComponent(this.value); closeMobileSearch(); }">
+        <i class="fas fa-times" style="color:var(--text-dim); padding:10px; margin:-10px; cursor:pointer;" onclick="closeMobileSearch({target: this})"></i>
+      </div>
+    </div>
+  </div>
+
+    </div>
+  </div>
+
+  <nav class="bottom-nav" id="bottom-nav">
+    <a href="index.html" class="bottom-nav-item">
+      <div class="bottom-nav-icon"><i class="fas fa-home"></i></div>
+      <span>الرئيسية</span>
+    </a>
+    <a href="library.html" class="bottom-nav-item">
+      <div class="bottom-nav-icon"><i class="fas fa-gamepad"></i></div>
+      <span>المكتبة</span>
+    </a>
+    <div class="bottom-nav-item bottom-nav-center" onclick="openMobileSearch()">
+      <div class="bottom-nav-icon-main"><i class="fas fa-search"></i></div>
+      <span>بحث</span>
+    </div>
+    <a href="videos.html" class="bottom-nav-item active">
+      <div class="bottom-nav-icon"><i class="fas fa-play-circle"></i></div>
+      <span>المقاطع</span>
+    </a>
+    <a href="auth.html" class="bottom-nav-item" id="bn-login" style="display:none">
+      <div class="bottom-nav-icon"><i class="fas fa-sign-in-alt"></i></div>
+      <span>دخول</span>
+    </a>
+    <a href="profile.html" class="bottom-nav-item" id="bn-profile" style="display:none; position:relative">
+      <div class="bottom-nav-icon"><i class="fas fa-user-circle"></i></div>
+      <span class="nav-notif-badge" style="position:absolute; top:-5px; left:50%; transform:translateX(10px); background:#ef4444; color:white; width:16px; height:16px; border-radius:50%; font-size:0.6rem; display:none; align-items:center; justify-content:center; font-weight:700; border:2px solid var(--bg);">0</span>
+      <span>حسابي</span>
+    </a>
+  </nav>
+
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/firebase-sync.js"></script>
+  <script src="js/watch.js"></script>
+</body>
+</html>
