@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تسجيل الدخول - RobaNos</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="js/theme.js"></script>
+</head>
+
+<body class="auth-body">
+
+  <div class="bg-particles"></div>
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- Top Actions -->
+  <div
+    style="position:fixed; top:30px; left:30px; right:30px; display:flex; justify-content:space-between; align-items:center; z-index:1000">
+    <a href="index.html" class="nav-logo" style="text-decoration:none">
+      <div class="nav-logo-icon site-brand-icon" style="width:45px; height:45px; font-size:1.4rem"><i
+          class="fas fa-cubes"></i></div>
+      <span class="nav-logo-text site-brand-name" style="font-size:1.6rem; color:var(--text)">RobaNos</span>
+    </a>
+
+    <!-- Theme Toggle (Simplified Sidebar-style) -->
+    <div class="g-theme-trigger" id="theme-toggle"
+      style="width: auto; padding: 12px 20px; border-radius: 50px; background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); cursor: pointer; display: flex; align-items:center; gap:10px; transition: 0.3s;">
+      <i class="fas fa-moon"></i>
+      <span style="font-size:0.9rem; font-weight:600">الوضع الليلي</span>
+    </div>
+  </div>
+
+  <!-- Auth Card -->
+  <div class="auth-card">
+
+    <!-- Tabs -->
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">
+        <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+      </button>
+      <button class="auth-tab" id="tab-register" onclick="switchTab('register')">
+        <i class="fas fa-user-plus"></i> إنشاء حساب
+      </button>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <form class="auth-form active" id="form-login" onsubmit="doLogin(event)">
+      <div class="auth-welcome">
+        <div class="auth-welcome-icon"><i class="fas fa-hand-wave" style="color:#fbbf24"></i></div>
+        <div>
+          <h1 class="auth-title">أهلاً بعودتك</h1>
+          <p class="auth-sub">سجّل دخولك للوصول لحسابك</p>
+        </div>
+      </div>
+
+      <div class="form-grp">
+        <label><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+        <input type="email" id="login-email" placeholder="example@email.com" autocomplete="email" required />
+      </div>
+      <div class="form-grp">
+        <label><i class="fas fa-lock"></i> كلمة السر</label>
+        <div class="pass-wrap">
+          <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password" required />
+          <button type="button" class="pass-toggle" onclick="togglePass('login-pass',this)">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+      </div>
+
+      <div id="login-err" class="auth-err" style="display:none"></div>
+
+      <button type="submit" class="auth-submit" id="login-btn">
+        <i class="fas fa-sign-in-alt"></i>
+        <span>تسجيل الدخول</span>
+      </button>
+    </form>
+
+    <!-- REGISTER FORM -->
+    <form class="auth-form" id="form-register" onsubmit="doRegister(event)">
+      <div class="auth-welcome">
+        <div class="auth-welcome-icon"><i class="fas fa-gamepad"></i></div>
+        <div>
+          <h1 class="auth-title">انضم إلينا</h1>
+          <p class="auth-sub">أنشئ حسابك مجاناً الآن</p>
+        </div>
+      </div>
+
+      <div class="form-grp">
+        <label><i class="fas fa-user"></i> الاسم</label>
+        <input type="text" id="reg-name" placeholder="اسمك الكامل" autocomplete="name" required />
+      </div>
+      <div class="form-grp">
+        <label><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+        <input type="email" id="reg-email" placeholder="example@email.com" autocomplete="email" required />
+      </div>
+      <div class="form-grp">
+        <label><i class="fas fa-lock"></i> كلمة السر</label>
+        <div class="pass-wrap">
+          <input type="password" id="reg-pass" placeholder="6 أحرف على الأقل" autocomplete="new-password" required />
+          <button type="button" class="pass-toggle" onclick="togglePass('reg-pass',this)">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+      </div>
+      <div class="form-grp">
+        <label><i class="fas fa-lock"></i> تأكيد كلمة السر</label>
+        <div class="pass-wrap">
+          <input type="password" id="reg-pass2" placeholder="أعد كتابة كلمة السر" autocomplete="new-password"
+            required />
+          <button type="button" class="pass-toggle" onclick="togglePass('reg-pass2',this)">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+      </div>
+
+      <div id="reg-err" class="auth-err" style="display:none"></div>
+
+      <button type="submit" class="auth-submit" id="reg-btn">
+        <i class="fas fa-user-plus"></i>
+        <span>إنشاء الحساب</span>
+      </button>
+    </form>
+
+    <div class="auth-footer-note">
+      بالتسجيل أنت توافق على <a href="#">شروط الاستخدام</a> و <a href="#">سياسة الخصوصية</a>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+  <!-- Mobile Search Overlay -->
+  <div class="mobile-search-overlay" id="mobile-search-overlay" onclick="closeMobileSearch(event)">
+    <div class="mobile-search-box">
+      <div class="mobile-search-inner" onclick="event.stopPropagation()">
+        <i class="fas fa-search" style="color:var(--text-muted)"></i>
+        <input type="text" id="mobile-search-input" placeholder="ابحث عن لعبة..."
+          onkeydown="if(event.key==='Enter') { if(typeof globalSearch === 'function') globalSearch(this.value); else window.location.href='library.html?search='+encodeURIComponent(this.value); closeMobileSearch(); }">
+        <i class="fas fa-times" style="color:var(--text-dim); padding:10px; margin:-10px; cursor:pointer;"
+          onclick="closeMobileSearch({target: this})"></i>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav" id="bottom-nav">
+    <a href="index.html" class="bottom-nav-item">
+      <div class="bottom-nav-icon"><i class="fas fa-home"></i></div>
+      <span>الرئيسية</span>
+    </a>
+    <a href="library.html" class="bottom-nav-item">
+      <div class="bottom-nav-icon"><i class="fas fa-gamepad"></i></div>
+      <span>المكتبة</span>
+    </a>
+    <div class="bottom-nav-item bottom-nav-center" onclick="openMobileSearch()">
+      <div class="bottom-nav-icon-main"><i class="fas fa-search"></i></div>
+      <span>بحث</span>
+    </div>
+    <a href="videos.html" class="bottom-nav-item">
+      <div class="bottom-nav-icon"><i class="fas fa-play-circle"></i></div>
+      <span>المقاطع</span>
+    </a>
+    <a href="profile.html" class="bottom-nav-item">
+      <div class="bottom-nav-icon"><i class="fas fa-user-circle"></i></div>
+      <span>حسابي</span>
+    </a>
+  </nav>
+
+
+  <!-- Firebase SDK (Compat Version for local file support) -->
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/firebase-sync.js"></script>
+
+  <script>
+    /* ---- Canvas ---- */
+    (function () {
+      const c = document.getElementById('bg-canvas');
+      if (!c) return;
+      const ctx = c.getContext('2d');
+      let W, H, ps = [];
+      function resize() { W = c.width = innerWidth; H = c.height = innerHeight; }
+      resize(); window.addEventListener('resize', resize);
+      for (let i = 0; i < 40; i++) ps.push({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.2 + 0.3, vx: (Math.random() - .5) * .3, vy: (Math.random() - .5) * .3, a: Math.random() * .45 + .1 });
+      function draw() { ctx.clearRect(0, 0, W, H); ps.forEach(p => { p.x += p.vx; p.y += p.vy; if (p.x < 0) p.x = W; if (p.x > W) p.x = 0; if (p.y < 0) p.y = H; if (p.y > H) p.y = 0; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fillStyle = `rgba(168,85,247,${p.a})`; ctx.fill(); }); requestAnimationFrame(draw); }
+      draw();
+    })();
+
+    /* ---- Tab switch ---- */
+    function switchTab(t) {
+      document.querySelectorAll('.auth-tab').forEach(e => e.classList.remove('active'));
+      document.querySelectorAll('.auth-form').forEach(e => e.classList.remove('active'));
+      document.getElementById('tab-' + t).classList.add('active');
+      document.getElementById('form-' + t).classList.add('active');
+    }
+
+    /* ---- Toggle password visibility ---- */
+    function togglePass(id, btn) {
+      const inp = document.getElementById(id);
+      const isPass = inp.type === 'password';
+      inp.type = isPass ? 'text' : 'password';
+      btn.querySelector('i').className = isPass ? 'fas fa-eye-slash' : 'fas fa-eye';
+    }
+
+    /* ---- Fill admin creds ---- */
+    function fillAdmin() {
+      document.getElementById('login-email').value = 'admin@RobaNos.com';
+      document.getElementById('login-pass').value = 'admin2025';
+    }
+
+    /* ---- Login ---- */
+    async function doLogin(e) {
+      e.preventDefault();
+      const btn = document.getElementById('login-btn');
+      const err = document.getElementById('login-err');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الدخول...';
+
+      const result = await login(
+        document.getElementById('login-email').value,
+        document.getElementById('login-pass').value
+      );
+
+      if (result.ok) {
+        btn.innerHTML = '<i class="fas fa-check"></i> تم الدخول!';
+        btn.style.background = 'linear-gradient(135deg,#22c55e,#16a34a)';
+        setTimeout(() => {
+          const ret = new URLSearchParams(location.search).get('from');
+          window.location.href = ret || 'index.html';
+        }, 700);
+      } else {
+        err.textContent = result.msg;
+        err.style.display = 'flex';
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-sign-in-alt"></i><span>تسجيل الدخول</span>';
+        setTimeout(() => err.style.display = 'none', 3500);
+      }
+    }
+
+    /* ---- Register ---- */
+    async function doRegister(e) {
+      e.preventDefault();
+      const btn = document.getElementById('reg-btn');
+      const err = document.getElementById('reg-err');
+      const pass = document.getElementById('reg-pass').value;
+      const pass2 = document.getElementById('reg-pass2').value;
+
+      if (pass !== pass2) {
+        err.textContent = 'كلمتا السر غير متطابقتين';
+        err.style.display = 'flex';
+        setTimeout(() => err.style.display = 'none', 3500);
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإنشاء...';
+
+      const result = await register(
+        document.getElementById('reg-name').value,
+        document.getElementById('reg-email').value,
+        pass
+      );
+
+      if (result.ok) {
+        btn.innerHTML = '<i class="fas fa-check"></i> تم الإنشاء!';
+        btn.style.background = 'linear-gradient(135deg,#22c55e,#16a34a)';
+        setTimeout(() => window.location.href = 'index.html', 700);
+      } else {
+        err.textContent = result.msg;
+        err.style.display = 'flex';
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-user-plus"></i><span>إنشاء الحساب</span>';
+        setTimeout(() => err.style.display = 'none', 3500);
+      }
+    }
+
+    /* ---- Redirect if already logged in ---- */
+    setTimeout(() => {
+      if (isLoggedIn()) window.location.href = 'index.html';
+    }, 500);
+  </script>
+</body>
+
+</html>

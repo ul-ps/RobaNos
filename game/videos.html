@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>فيديوهات الألعاب - RobaNos</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="js/theme.js"></script>
+  <style>
+    .v-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      padding: 20px 0;
+    }
+
+    .v-title h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 5px;
+    }
+
+    .v-title p {
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+
+    .v-search {
+      position: relative;
+      width: 350px;
+    }
+
+    .v-search input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 45px 12px 20px;
+      color: #fff;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .v-search i {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+    }
+
+    .v-search input:focus {
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .videos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 25px;
+    }
+
+    .video-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: var(--transition);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .video-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--primary-light);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    }
+
+    .video-thumb-container {
+      position: relative;
+      aspect-ratio: 16/9;
+      overflow: hidden;
+    }
+
+    .video-thumb {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      transition: 0.5s;
+    }
+
+    .video-card:hover .video-thumb {
+      transform: scale(1.1);
+    }
+
+    .play-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: 0.3s;
+    }
+
+    .video-card:hover .play-overlay {
+      opacity: 1;
+    }
+
+    .play-btn {
+      width: 50px;
+      height: 50px;
+      background: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.2rem;
+    }
+
+    .video-info {
+      padding: 20px;
+    }
+
+    .v-cat {
+      font-size: 0.8rem;
+      color: var(--primary-light);
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .v-title-text {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 900px) {
+      .v-header {
+        flex-direction: column;
+        gap: 20px;
+        align-items: flex-start;
+      }
+
+      .v-search {
+        width: 100%;
+      }
+
+      .videos-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .video-info {
+        padding: 12px;
+      }
+
+      .v-title-text {
+        font-size: 0.95rem;
+      }
+
+      .v-cat {
+        font-size: 0.75rem;
+        margin-bottom: 3px;
+      }
+    }
+
+    .light-mode .v-title-text,
+    .light-mode .v-title h1 {
+      color: #1e293b;
+    }
+
+    /* Official Channel */
+    .official-channel {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 40px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .oc-banner {
+      height: 180px;
+      background: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop') center/cover;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      padding: 25px;
+    }
+
+    .oc-banner-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(8, 8, 30, 0.95) 0%, rgba(8, 8, 30, 0.2) 100%);
+    }
+
+    .oc-profile {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      width: 100%;
+    }
+
+    .oc-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--gradient-primary);
+      border: 4px solid #08081f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      color: #fff;
+      box-shadow: 0 0 25px rgba(124, 58, 237, 0.5);
+    }
+
+    .oc-info h2 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.8rem;
+      margin: 0;
+      color: #fff;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .oc-info p {
+      margin: 6px 0 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .oc-subscribe {
+      margin-right: auto;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 8px 20px;
+      border-radius: 50px;
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+      backdrop-filter: blur(5px);
+    }
+
+    .oc-subscribe:hover {
+      background: var(--primary);
+      border-color: var(--primary-light);
+    }
+
+    .v-meta {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      margin-top: 8px;
+    }
+
+    /* Official Channel Slider */
+    .oc-slider-section {
+      position: relative;
+      background: rgba(0, 0, 0, 0.2);
+      border-top: 1px solid var(--border);
+      padding: 0;
+    }
+
+    /* Gradients for overflow indication */
+    .oc-slider-section::before,
+    .oc-slider-section::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 60px;
+      z-index: 5;
+      pointer-events: none;
+      opacity: 0;
+      transition: 0.3s;
+    }
+
+    .oc-slider-section::after {
+      right: 0;
+      background: linear-gradient(to left, rgba(8, 8, 30, 0.8), transparent);
+    }
+
+    .oc-slider-section::before {
+      left: 0;
+      background: linear-gradient(to right, rgba(8, 8, 30, 0.8), transparent);
+    }
+
+    .oc-slider-section.has-overflow::before,
+    .oc-slider-section.has-overflow::after {
+      opacity: 1;
+    }
+
+    .oc-videos-wrapper {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding: 25px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .oc-videos-wrapper::-webkit-scrollbar {
+      display: none;
+    }
+
+    .oc-videos-wrapper .video-card {
+      min-width: 280px;
+      flex: 0 0 280px;
+      margin: 0;
+    }
+
+    .oc-nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 45px;
+      height: 45px;
+      background: var(--gradient-primary);
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      cursor: pointer;
+      z-index: 10;
+      border: none;
+      box-shadow: 0 5px 15px rgba(124, 58, 237, 0.4);
+      transition: 0.3s;
+    }
+
+    .oc-slider-section.has-overflow .oc-nav-btn {
+      display: flex;
+    }
+
+    .oc-nav-btn:hover {
+      transform: translateY(-50%) scale(1.1);
+      box-shadow: 0 8px 25px rgba(124, 58, 237, 0.6);
+    }
+
+    .oc-nav-btn.prev {
+      right: 10px;
+    }
+
+    .oc-nav-btn.next {
+      left: 10px;
+    }
+
+    .oc-nav-btn i {
+      font-size: 1.2rem;
+    }
+
+    @media (max-width: 900px) {
+      .oc-nav-btn {
+        display: none;
+      }
+
+      .oc-videos-wrapper {
+        padding: 20px 0;
+        gap: 15px;
+      }
+
+      .oc-videos-wrapper .video-card {
+        min-width: 240px;
+        flex: 0 0 240px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .oc-banner {
+        height: 220px;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .oc-profile {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .oc-subscribe {
+        margin: 10px auto 0;
+      }
+    }
+
+    .light-mode .official-channel {
+      background: #fff;
+    }
+
+    .light-mode .oc-banner-overlay {
+      background: linear-gradient(to top, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.4) 100%);
+    }
+
+    .light-mode .oc-avatar {
+      border-color: #fff;
+    }
+
+    .light-mode .oc-info h2 {
+      color: #1e293b;
+    }
+
+    .light-mode .oc-info p {
+      color: #475569;
+    }
+
+    .light-mode .oc-stats-bar {
+      color: #64748b;
+    }
+
+    .light-mode .oc-stat-item b {
+      color: #1e293b;
+    }
+
+    .light-mode .oc-subscribe {
+      background: rgba(0, 0, 0, 0.05);
+      color: #1e293b;
+      border-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .light-mode .oc-subscribe:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .light-mode .oc-videos {
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    /* Category Filters */
+    .v-filters {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      overflow-x: auto;
+      padding-bottom: 5px;
+    }
+
+    .v-filters::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .v-filter-btn {
+      padding: 8px 16px;
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      cursor: pointer;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: var(--transition);
+      font-family: 'Exo 2', sans-serif;
+    }
+
+    .v-filter-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .v-filter-btn.active {
+      background: var(--gradient-primary);
+      color: #fff;
+      border-color: transparent;
+    }
+
+    .light-mode .v-filter-btn {
+      background: #f8fafc;
+      border-color: rgba(0, 0, 0, 0.1);
+      color: #475569;
+    }
+
+    .light-mode .v-filter-btn.active {
+      background: rgba(124, 58, 237, 0.1);
+      /* light purple */
+      color: var(--primary);
+      border-color: var(--primary-light);
+      font-weight: 700;
+    }
+
+    /* Add Video Modal Overlay & Content */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 10, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      animation: modalIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-content {
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 35px;
+      width: 100%;
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary) transparent;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 25px;
+      left: 25px;
+      background: rgba(255, 255, 255, 0.05);
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1.1rem;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.3s;
+    }
+
+    .modal-close:hover {
+      background: var(--red);
+      color: #fff;
+      transform: rotate(90deg);
+    }
+
+    .form-group {
+      margin-bottom: 22px;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      outline: none;
+      transition: 0.3s;
+      font-family: inherit;
+      font-size: 1rem;
+    }
+
+    .form-input:focus {
+      border-color: var(--primary);
+      background: rgba(124, 58, 237, 0.1);
+      box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.15);
+    }
+
+    /* Select & Dropdown Styling */
+    select.form-input {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: left 15px center;
+      background-size: 18px;
+      padding-left: 45px;
+      cursor: pointer;
+    }
+
+    select.form-input option,
+    select.form-input optgroup {
+      background: #1e293b;
+      color: #fff;
+      padding: 10px;
+    }
+
+    select.form-input optgroup {
+      font-weight: 700;
+      color: var(--primary-light);
+      background: #0f172a;
+    }
+
+    .light-mode .modal-content {
+      background: #ffffff;
+      border-color: rgba(0, 0, 0, 0.08);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+    }
+
+    .light-mode .form-input {
+      background: #f1f5f9;
+      border-color: rgba(0, 0, 0, 0.1);
+      color: #1e293b;
+    }
+
+    .light-mode .form-input:focus {
+      background: #fff;
+    }
+
+    .light-mode select.form-input {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23475569'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    }
+
+    .light-mode select.form-input option,
+    .light-mode select.form-input optgroup {
+      background: #ffffff;
+      color: #1e293b;
+    }
+
+    .light-mode select.form-input optgroup {
+      background: #f8fafc;
+      color: var(--primary);
+    }
+
+    .edit-v-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      z-index: 10;
+      opacity: 0;
+      transition: 0.3s;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .video-card:hover .edit-v-btn {
+      opacity: 1;
+      transform: translateY(-5px);
+    }
+
+    .edit-v-btn:hover {
+      background: var(--primary-light);
+      transform: translateY(-5px) scale(1.05);
+    }
+
+    .delete-v-btn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(239, 68, 68, 0.9);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: 0.3s;
+      transform: translateY(10px);
+      z-index: 10;
+    }
+
+    .video-card:hover .delete-v-btn {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .delete-v-btn:hover {
+      background: #ef4444;
+      transform: scale(1.1);
+    }
+
+    .oc-stats-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 5px;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+    }
+
+    .oc-stat-item b {
+      color: #fff;
+      margin: 0 2px;
+    }
+
+    .oc-stat-separator {
+      opacity: 0.3;
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Custom Toast System */
+    .toast-container {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 10000;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 12px 20px;
+      color: #fff;
+      font-weight: 500;
+      min-width: 280px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      animation: toastIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      pointer-events: auto;
+    }
+
+    .toast.success {
+      border-left: 4px solid #10b981;
+    }
+
+    .toast.error {
+      border-left: 4px solid #ef4444;
+    }
+
+    .toast.info {
+      border-left: 4px solid #3b82f6;
+    }
+
+    .toast i {
+      font-size: 1.2rem;
+    }
+
+    .toast.success i {
+      color: #10b981;
+    }
+
+    .toast.error i {
+      color: #ef4444;
+    }
+
+    .toast.info i {
+      color: #3b82f6;
+    }
+
+    .toast.out {
+      animation: toastOut 0.4s ease forwards;
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes toastOut {
+      to {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.9);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="main-layout">
+    <!-- Sidebar -->
+    <aside class="g-sidebar">
+      <a href="index.html" class="g-logo">
+        <i class="fas fa-cubes"></i>
+        <span class="g-logo-text">RobaNos</span>
+      </a>
+
+      <div class="nav-search" style="margin-bottom: 30px; width: 100%;">
+        <input type="text" id="main-search" placeholder="ابحث عن لعبة..."
+          onkeydown="if(event.key==='Enter') globalSearch(this.value)" style="width:100%" />
+        <i class="fas fa-search nav-search-icon" style="left: 15px; right: auto; cursor:pointer;"
+          onclick="globalSearch(document.getElementById('main-search').value)"></i>
+      </div>
+      <ul class="g-nav">
+        <li><a href="index.html" class="g-nav-link"><i class="fas fa-home"></i> الرئيسية</a></li>
+        <li><a href="videos.html" class="g-nav-link active"><i class="fas fa-play-circle"></i> الفيديوهات</a></li>
+        <li><a href="library.html" class="g-nav-link"><i class="fas fa-gamepad"></i> المكتبة</a></li>
+        <li><a href="upcoming.html" class="g-nav-link"><i class="fas fa-calendar-alt"></i> قادمة قريباً</a></li>
+        <li style="margin: 10px 0; border-bottom: 1px solid var(--border); opacity: 0.5;"></li>
+        <li><a href="profile.html" class="g-nav-link" id="nav-user-link" style="display:none; position:relative;"><i
+              class="fas fa-user-circle"></i> ملفي الشخصي <span class="nav-notif-badge"
+              style="position:absolute; top:50%; left:20px; transform:translateY(-50%); background:#ef4444; color:white; width:18px; height:18px; border-radius:50%; font-size:0.7rem; display:none; align-items:center; justify-content:center; font-weight:700; border:2px solid var(--bg-card);">0</span></a>
+        </li>
+        <li><a href="auth.html" class="g-nav-link" id="nav-auth-btn" style="display:none"><i
+              class="fas fa-sign-in-alt"></i> تسجيل الدخول</a></li>
+        <li><a href="#" class="g-nav-link" id="nav-logout-btn" onclick="logout(); return false;"
+            style="display:none; color:#f87171"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a></li>
+        <li style="margin: 10px 0; border-bottom: 1px solid var(--border); opacity: 0.5;"></li>
+        <li><a href="submit-game.html" class="g-nav-link" id="nav-submit-btn" style="display:none"><i
+              class="fas fa-upload"></i> أرسل لعبتك</a></li>
+        <li><a href="dashboard.html" class="g-nav-link" id="nav-dash-btn" style="display:none"><i
+              class="fas fa-sliders-h"></i> لوحة التحكم</a></li>
+      </ul>
+      <div class="g-theme-trigger" id="theme-toggle">
+        <i class="fas fa-moon"></i>
+        <span>تبديل الوضع</span>
+      </div>
+    </aside>
+
+    <!-- Content -->
+    <div class="content-wrapper" style="padding: 20px 40px;">
+      <header class="v-header">
+        <div class="v-title">
+          <h1>مكتبة الفيديوهات</h1>
+          <p>استكشف أحدث العروض الدعائية وأسلوب اللعب.</p>
+        </div>
+        <div class="v-search">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="ابحث عن فيديوهات..." id="video-search-input"
+            oninput="handleVideoSearch(this.value)">
+        </div>
+      </header>
+
+      <!-- Official Channel Profile -->
+      <section class="official-channel">
+        <div class="oc-banner">
+          <div class="oc-banner-overlay"></div>
+          <div class="oc-profile">
+            <div class="oc-avatar"><i class="fas fa-cubes"></i></div>
+            <div class="oc-info">
+              <h2><span class="site-brand-name">RobaNos</span> Official <span class="verified-badge" title="منصة رسمية"><i class="fas fa-check"></i></span></h2>
+              <div class="oc-stats-bar">
+                <span class="oc-stat-item"><i class="fas fa-video"></i> <b id="oc-total-videos">0</b> فيديوهات</span>
+                <span class="oc-stat-separator">·</span>
+                <span class="oc-stat-item"><i class="fas fa-eye"></i> <b id="oc-total-views">0</b> مشاهدات</span>
+                <span class="oc-stat-separator">·</span>
+                <span class="oc-stat-item"><i class="fas fa-heart"></i> <b id="oc-total-likes">0</b> إعجابات</span>
+              </div>
+            </div>
+            <div class="oc-actions"
+              style="margin-right: auto; display: flex; gap: 10px; align-items: center; position: relative; z-index: 5;">
+              <button id="btn-add-video" class="oc-subscribe"
+                style="display:none; background: var(--primary); border-color: var(--primary-light); box-shadow: 0 4px 15px rgba(124,58,237,0.3);"
+                onclick="openAddVideoModal()">
+                <i class="fas fa-plus-circle"></i> إضافة فيديو جديد
+              </button>
+              <button id="btn-subscribe" class="oc-subscribe" onclick="handleSubscribe()"><i class="fas fa-bell"></i>
+                اشتراك</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="oc-slider-section">
+          <button class="oc-nav-btn next" onclick="scrollOC(1)"><i class="fas fa-chevron-left"></i></button>
+          <button class="oc-nav-btn prev" onclick="scrollOC(-1)"><i class="fas fa-chevron-right"></i></button>
+
+          <div class="oc-videos-wrapper" id="official-videos-grid">
+            <!-- Official Videos Dynamically Loaded -->
+          </div>
+        </div>
+      </section>
+
+      <div class="v-filters" id="video-filters">
+        <button class="v-filter-btn active" onclick="filterVideos('الكل', this)"><i class="fas fa-th-large"></i>
+          الكل</button>
+        <button class="v-filter-btn" onclick="filterVideos('تعليمية', this)"><i class="fas fa-graduation-cap"></i>
+          تعليمية</button>
+        <button class="v-filter-btn" onclick="filterVideos('أكشن', this)"><i class="fas fa-shield-halved"></i>
+          أكشن</button>
+        <button class="v-filter-btn" onclick="filterVideos('مغامرات', this)"><i class="fas fa-mountain-sun"></i>
+          مغامرات</button>
+        <button class="v-filter-btn" onclick="filterVideos('رياضة', this)"><i class="fas fa-volleyball"></i>
+          رياضة</button>
+        <button class="v-filter-btn" onclick="filterVideos('RPG', this)">RPG</button>
+      </div>
+
+      <div id="videos-container" class="videos-grid">
+        <!-- Dynamic -->
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+  <!-- Mobile Search Overlay -->
+  <div class="mobile-search-overlay" id="mobile-search-overlay" onclick="closeMobileSearch(event)">
+    <div class="mobile-search-box">
+      <div class="mobile-search-inner" onclick="event.stopPropagation()">
+        <i class="fas fa-search" style="color:var(--text-muted)"></i>
+        <input type="text" id="mobile-search-input" placeholder="ابحث عن لعبة..."
+          onkeydown="if(event.key==='Enter') { if(typeof globalSearch === 'function') globalSearch(this.value); else window.location.href='library.html?search='+encodeURIComponent(this.value); closeMobileSearch(); }">
+        <i class="fas fa-times" style="color:var(--text-dim); padding:10px; margin:-10px; cursor:pointer;"
+          onclick="closeMobileSearch({target: this})"></i>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav" id="bottom-nav">
+    <a href="index.html" class="bottom-nav-item">
+      <div class="bottom-nav-icon"><i class="fas fa-home"></i></div>
+      <span>الرئيسية</span>
+    </a>
+    <a href="library.html" class="bottom-nav-item">
+      <div class="bottom-nav-icon"><i class="fas fa-gamepad"></i></div>
+      <span>المكتبة</span>
+    </a>
+    <div class="bottom-nav-item bottom-nav-center" onclick="openMobileSearch()">
+      <div class="bottom-nav-icon-main"><i class="fas fa-search"></i></div>
+      <span>بحث</span>
+    </div>
+    <a href="videos.html" class="bottom-nav-item active">
+      <div class="bottom-nav-icon"><i class="fas fa-play-circle"></i></div>
+      <span>المقاطع</span>
+    </a>
+    <a href="auth.html" class="bottom-nav-item" id="bn-login" style="display:none">
+      <div class="bottom-nav-icon"><i class="fas fa-sign-in-alt"></i></div>
+      <span>دخول</span>
+    </a>
+    <a href="profile.html" class="bottom-nav-item" id="bn-profile" style="display:none; position:relative">
+      <div class="bottom-nav-icon"><i class="fas fa-user-circle"></i></div>
+      <span class="nav-notif-badge"
+        style="position:absolute; top:-5px; left:50%; transform:translateX(10px); background:#ef4444; color:white; width:16px; height:16px; border-radius:50%; font-size:0.6rem; display:none; align-items:center; justify-content:center; font-weight:700; border:2px solid var(--bg);">0</span>
+      <span>حسابي</span>
+    </a>
+  </nav>
+
+  <!-- Add Video Modal (Admin) -->
+  <div class="modal-overlay" id="add-video-modal">
+    <div class="modal-content" style="max-width: 500px">
+      <div class="modal-close" onclick="closeAddVideoModal()"><i class="fas fa-times"></i></div>
+      <h2 style="margin-bottom:20px; color:#fff"><i class="fas fa-video"></i> إضافة فيديو جديد</h2>
+      <form id="add-video-form" onsubmit="submitNewVideo(event)">
+        <div class="form-group">
+          <label class="form-label">عنوان الفيديو</label>
+          <input type="text" class="form-input" id="v-title-input" required />
+        </div>
+        <div class="form-row" style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+          <div class="form-group">
+            <label class="form-label">التصنيف</label>
+            <select class="form-input" id="v-cat-input">
+              <optgroup label="تقني / تعليمي">
+                <option>دليل وعملي</option>
+                <option>الميزات</option>
+                <option>تعليمية</option>
+                <option>شروحات</option>
+              </optgroup>
+              <optgroup label="ألعاب">
+                <option>أكشن</option>
+                <option>مغامرات</option>
+                <option>رعب</option>
+                <option>رياضة</option>
+                <option>السباقات</option>
+                <option>استراتيجية</option>
+                <option>RPG</option>
+              </optgroup>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">نوع الفيديو</label>
+            <select class="form-input" id="v-type-input">
+              <option value="official" selected>فيديو القناة الرسمية</option>
+              <option value="general">فيديو عام / إعلان لعبة</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">رابط الفيديو (YouTube، MP4، الخ)</label>
+          <input type="url" class="form-input" id="v-url-input" placeholder="رابط يوتيوب أو رابط مباشر بصيغة MP4..."
+            required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">رابط صورة مصغرة (مفضل وضعها)</label>
+          <input type="url" class="form-input" id="v-thumb-input"
+            placeholder="يترك فارغاً لاعتماده تلقائياً إن كان يوتيوب..." />
+        </div>
+        <button type="submit" class="btn-primary" style="width:100%"><i class="fas fa-plus-circle"></i> إضافة
+          الآن</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="confirm-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 400px; text-align: center;">
+      <div style="font-size: 3rem; color: #ef4444; margin-bottom: 20px;"><i class="fas fa-exclamation-triangle"></i>
+      </div>
+      <h2 style="margin-bottom: 10px;">هل أنت متأكد؟</h2>
+      <p style="color: var(--text-muted); margin-bottom: 30px;">هل تريد فعلاً حذف هذا الفيديو؟ لا يمكن التراجع عن هذه
+        العملية.</p>
+      <div style="display: flex; gap: 15px; justify-content: center;">
+        <button class="oc-subscribe" style="background: var(--bg-card); border: 1px solid var(--border);"
+          onclick="closeConfirmModal()">إلغاء</button>
+        <button id="confirm-delete-btn" class="oc-subscribe" style="background: #ef4444; border: none;">حذف
+          الآن</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/videos.js"></script>
+  <script>
+    window.addEventListener('firebaseDataReady', () => {
+      if (typeof injectNavAuth === 'function') injectNavAuth();
+      if (typeof isAdmin === 'function' && isAdmin()) {
+        const btn = document.getElementById('btn-add-video');
+        if (btn) btn.style.display = 'inline-block';
+      }
+    });
+
+    function openAddVideoModal() {
+      document.getElementById('add-video-modal').classList.add('active');
+    }
+
+    function closeAddVideoModal() {
+      document.getElementById('add-video-modal').classList.remove('active');
+      document.getElementById('add-video-form').reset();
+      window.currentEditingVideoId = null;
+      const titleEl = document.querySelector('#add-video-modal h2');
+      if (titleEl) titleEl.innerHTML = '<i class="fas fa-video"></i> إضافة فيديو جديد';
+    }
+
+    window.openConfirmModal = function (onConfirm) {
+      const modal = document.getElementById('confirm-modal');
+      const btn = document.getElementById('confirm-delete-btn');
+      modal.classList.add('active');
+      btn.onclick = () => {
+        onConfirm();
+        closeConfirmModal();
+      };
+    };
+
+    window.closeConfirmModal = function () {
+      document.getElementById('confirm-modal').classList.remove('active');
+    };
+
+    function submitNewVideo(e) {
+      e.preventDefault();
+      const title = document.getElementById('v-title-input').value.trim();
+      const cat = document.getElementById('v-cat-input').value;
+      const url = document.getElementById('v-url-input').value.trim();
+      const type = document.getElementById('v-type-input').value;
+      let thumb = document.getElementById('v-thumb-input').value.trim();
+
+      if (!title || !url) return;
+
+      // Auto-thumb detection if empty
+      if (!thumb) {
+        // YouTube
+        const ytMatch = url.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/);
+        if (ytMatch && ytMatch[1]) {
+          thumb = `https://img.youtube.com/vi/${ytMatch[1]}/maxresdefault.jpg`;
+        } else {
+          // Vimeo
+          const vimMatch = url.match(/(?:https?:\/\/)?(?:www\.)?(?:vimeo\.com\/)(\d+)/);
+          if (vimMatch && vimMatch[1]) {
+            thumb = `https://vumbnail.com/${vimMatch[1]}.jpg`;
+          }
+        }
+      }
+
+      const newVideo = {
+        id: Date.now(),
+        name: title,
+        category: cat,
+        videoUrl: url,
+        imageUrl: thumb || '',
+        type: type, // 'official' or 'general'
+        submittedBy: type === 'official' ? `${getBranding().name} Official` : `${getBranding().name} Admin`,
+        desc: type === 'official' ? `فيديو تعليمي رسمي من فريق ${getBranding().name}.` : 'تم إضافته حديثاً بواسطة المشرف.'
+      };
+
+      try {
+        let extra = [];
+        try {
+          extra = JSON.parse(localStorage.getItem('gv_extra_videos') || '[]');
+          if (!Array.isArray(extra)) extra = [];
+        } catch (e) { extra = []; }
+
+        if (window.currentEditingVideoId) {
+          const index = extra.findIndex(v => v.id == window.currentEditingVideoId);
+          if (index !== -1) {
+            extra[index] = { ...extra[index], ...newVideo, id: window.currentEditingVideoId };
+            localStorage.setItem('gv_extra_videos', JSON.stringify(extra));
+            showToast('تم تحديث الفيديو بنجاح', 'success');
+          }
+        } else {
+          extra.push(newVideo);
+          localStorage.setItem('gv_extra_videos', JSON.stringify(extra));
+          showToast('تمت إضافة الفيديو بنجاح', 'success');
+        }
+
+        closeAddVideoModal();
+        if (typeof initVideos === 'function') initVideos();
+      } catch (err) {
+        console.error("Video Submit Error:", err);
+        showToast('حدث خطأ أثناء حفظ البيانات: ' + err.message, 'error');
+      }
+    }
+
+    function showToast(msg, type = 'success') {
+      let container = document.querySelector('.toast-container');
+      if (!container) {
+        container = document.createElement('div');
+        container.className = 'toast-container';
+        document.body.appendChild(container);
+      }
+
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      const icon = type === 'success' ? 'fas fa-check-circle' : (type === 'error' ? 'fas fa-exclamation-circle' : 'fas fa-info-circle');
+
+      toast.innerHTML = `
+        <i class="${icon}"></i>
+        <span>${msg}</span>
+      `;
+
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.add('out');
+        setTimeout(() => toast.remove(), 400);
+      }, 4000);
+    }
+
+    // Fallback search logic in case videos.js doesn't override it immediately
+    function handleVideoSearch(q) {
+      if (typeof window.triggerVideoSearch === 'function') {
+        window.triggerVideoSearch(q);
+      } else {
+        const cards = document.querySelectorAll('.video-card');
+        const query = q.toLowerCase();
+        cards.forEach(card => {
+          const title = card.querySelector('.v-title-text').textContent.toLowerCase();
+          card.style.display = title.includes(query) ? 'block' : 'none';
+        });
+      }
+    }
+
+    function filterVideos(category, btnElement) {
+      // Update active class
+      document.querySelectorAll('.v-filter-btn').forEach(btn => btn.classList.remove('active'));
+      btnElement.classList.add('active');
+
+      // Trigger global filter function
+      if (typeof window.applyVideoFilter === 'function') {
+        window.applyVideoFilter(category);
+      }
+    }
+  </script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/firebase-sync.js"></script>
+</body>
+
+</html>

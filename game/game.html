@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تفاصيل اللعبة - RobaNos</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="js/theme.js?v=1.1"></script>
+  <style>
+    .game-page-wrapper {
+      padding: 40px 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .gp-header {
+      display: flex;
+      gap: 40px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px;
+      margin-bottom: 40px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .gp-cover {
+      width: 260px;
+      aspect-ratio: 2/3;
+      border-radius: 18px;
+      background-size: cover;
+      background-position: center;
+      flex-shrink: 0;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      z-index: 1;
+    }
+
+    .gp-info {
+      flex: 1;
+      z-index: 1;
+    }
+
+    .gp-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 15px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .gp-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+
+    .gp-meta-tag {
+      padding: 6px 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .gp-meta-tag i {
+      color: var(--primary-light);
+    }
+
+    .gp-download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 40px;
+      background: var(--gradient-primary);
+      border-radius: 16px;
+      color: white;
+      font-size: 1.2rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: var(--transition);
+      box-shadow: 0 10px 25px rgba(124, 58, 237, 0.3);
+    }
+
+    .gp-download-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(124, 58, 237, 0.5);
+    }
+
+    /* Download Loading State */
+    .gp-download-btn.loading {
+      pointer-events: none;
+      filter: grayscale(0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .gp-download-btn.loading::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 0%;
+      background: rgba(255, 255, 255, 0.15);
+      z-index: 0;
+      transition: width 3s linear;
+    }
+
+    .gp-download-btn.loading.active::before {
+      width: 100%;
+    }
+
+    .gp-download-btn span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .gp-download-btn i {
+      position: relative;
+      z-index: 1;
+    }
+
+    .download-count-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: 800;
+      z-index: 2;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      color: #fff;
+    }
+
+    .gp-download-btn.loading .download-count-overlay {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .gp-body {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 30px;
+    }
+
+    .gp-section {
+      min-width: 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 25px;
+    }
+
+    .gp-section-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .gp-desc {
+      line-height: 1.8;
+      color: var(--text-dim);
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    @media (max-width: 900px) {
+      .game-page-wrapper {
+        padding: 15px 10px;
+      }
+
+      .gp-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 15px 25px;
+        border-radius: 20px;
+        box-shadow: var(--shadow-card);
+        border: none;
+        margin-bottom: 20px;
+      }
+
+      .gp-body {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .gp-cover {
+        width: 100%;
+        max-width: 150px;
+        margin: 0 auto 10px;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      .gp-title {
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+      }
+
+      .gp-meta {
+        justify-content: center;
+        margin-bottom: 15px;
+        gap: 6px;
+      }
+
+      .gp-meta-tag {
+        font-size: 0.8rem;
+        padding: 4px 10px;
+        border-radius: 8px;
+      }
+
+      .gp-actions {
+        justify-content: center;
+        margin-top: 20px;
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+      }
+
+      .gp-download-btn,
+      .share-game-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 14px;
+        font-size: 1.05rem;
+        border-radius: 12px;
+      }
+
+      .gp-section {
+        min-width: 0;
+        padding: 20px 15px;
+        margin-bottom: 20px;
+        border-radius: 20px;
+        border: none;
+        box-shadow: var(--shadow-card);
+      }
+
+      .gp-section-title {
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+      }
+
+      .gp-reactions-container {
+        justify-content: center;
+      }
+    }
+
+    .gp-reactions-container {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .react-btn {
+      min-width: 90px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .react-btn i {
+      font-size: 1.1rem;
+    }
+
+    .react-btn span {
+      font-weight: 700;
+      font-family: sans-serif;
+    }
+
+    /* Custom Toast */
+    .gv-toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 20px;
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 1000000;
+      opacity: 0;
+      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--primary-light);
+    }
+
+    .gv-toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* Badge refinement */
+    .game-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeRight {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .gp-cover {
+      animation: scaleIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    .gp-info {
+      animation: fadeRight 0.8s ease-out 0.2s both;
+    }
+
+    .gp-section {
+      animation: fadeUp 0.8s ease-out both;
+    }
+
+    /* Staggered section animations */
+    .gp-section:nth-child(1) {
+      animation-delay: 0.3s;
+    }
+
+    .gp-section:nth-child(2) {
+      animation-delay: 0.4s;
+    }
+
+    .gp-section:nth-child(3) {
+      animation-delay: 0.5s;
+    }
+
+    /* Meta tags hover */
+    .gp-meta-tag {
+      transition: all 0.3s ease;
+      cursor: default;
+    }
+
+    .gp-meta-tag:hover {
+      background: rgba(124, 58, 237, 0.15);
+      border-color: var(--primary-light);
+      transform: translateY(-2px);
+      color: #fff;
+    }
+
+    .light-mode .gp-meta-tag:hover {
+      background: rgba(124, 58, 237, 0.08) !important;
+      color: var(--primary-dark) !important;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="bg-particles"></div>
+  <canvas id="bg-canvas"></canvas>
+
+  <div class="main-layout">
+    <!-- Sidebar -->
+    <aside class="g-sidebar">
+      <a href="index.html" class="g-logo">
+        <i class="fas fa-cubes site-brand-icon"></i>
+        <span class="g-logo-text site-brand-name">RobaNos</span>
+      </a>
+
+      <div class="nav-search" style="margin-bottom: 30px; width: 100%;">
+        <input type="text" id="main-search" placeholder="ابحث عن لعبة..."
+          onkeydown="if(event.key==='Enter') globalSearch(this.value)" style="width:100%" />
+        <i class="fas fa-search nav-search-icon" style="left: 15px; right: auto; cursor:pointer;"
+          onclick="globalSearch(document.getElementById('main-search').value)"></i>
+      </div>
+
+      <ul class="g-nav">
+        <li><a href="index.html" class="g-nav-link"><i class="fas fa-home"></i> الرئيسية</a></li>
+        <li><a href="videos.html" class="g-nav-link"><i class="fas fa-play-circle"></i> الفيديوهات</a></li>
+        <li><a href="library.html" class="g-nav-link"><i class="fas fa-gamepad"></i> المكتبة</a></li>
+        <li><a href="upcoming.html" class="g-nav-link"><i class="fas fa-calendar-alt"></i> قادمة قريباً</a></li>
+        <li style="margin: 10px 0; border-bottom: 1px solid var(--border); opacity: 0.5;"></li>
+        <li><a href="profile.html" class="g-nav-link" id="nav-user-link" style="display:none; position:relative;"><i
+              class="fas fa-user-circle"></i> ملفي الشخصي <span class="nav-notif-badge"
+              style="position:absolute; top:50%; left:20px; transform:translateY(-50%); background:#ef4444; color:white; width:18px; height:18px; border-radius:50%; font-size:0.7rem; display:none; align-items:center; justify-content:center; font-weight:700; border:2px solid var(--bg-card);">0</span></a>
+        </li>
+        <li><a href="auth.html" class="g-nav-link" id="nav-auth-btn" style="display:none"><i
+              class="fas fa-sign-in-alt"></i> تسجيل الدخول</a></li>
+        <li><a href="#" class="g-nav-link" id="nav-logout-btn" onclick="logout(); return false;"
+            style="display:none; color:#f87171"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a></li>
+        <li style="margin: 10px 0; border-bottom: 1px solid var(--border); opacity: 0.5;"></li>
+        <li><a href="submit-game.html" class="g-nav-link" id="nav-submit-btn" style="display:none"><i
+              class="fas fa-upload"></i> أرسل لعبتك</a></li>
+        <li><a href="dashboard.html" class="g-nav-link" id="nav-dash-btn" style="display:none"><i
+              class="fas fa-sliders-h"></i> لوحة التحكم</a></li>
+      </ul>
+
+      <div class="g-theme-trigger" id="theme-toggle">
+        <i class="fas fa-moon"></i>
+        <span>تبديل الوضع</span>
+      </div>
+    </aside>
+
+    <!-- Content -->
+    <div class="content-wrapper">
+      <div class="game-page-wrapper" id="game-container">
+        <!-- Dynamic content handled by game.js -->
+        <div style="text-align:center;padding:150px;color:var(--text-muted)">
+          <i class="fas fa-spinner fa-spin fa-2x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+  <!-- Mobile Search Overlay -->
+  <div class="mobile-search-overlay" id="mobile-search-overlay" onclick="closeMobileSearch(event)">
+    <div class="mobile-search-box">
+      <div class="mobile-search-inner" onclick="event.stopPropagation()">
+        <i class="fas fa-search" style="color:var(--text-muted)"></i>
+        <input type="text" id="mobile-search-input" placeholder="ابحث عن لعبة..."
+          onkeydown="if(event.key==='Enter') { if(typeof globalSearch === 'function') globalSearch(this.value); else window.location.href='library.html?search='+encodeURIComponent(this.value); closeMobileSearch(); }">
+        <i class="fas fa-times" style="color:var(--text-dim); padding:10px; margin:-10px; cursor:pointer;"
+          onclick="closeMobileSearch({target: this})"></i>
+      </div>
+    </div>
+  </div>
+
+  </div>
+  </div>
+
+  <nav class="bottom-nav" id="bottom-nav">
+    <a href="index.html" class="bottom-nav-item">
+      <div class="bottom-nav-icon"><i class="fas fa-home"></i></div>
+      <span>الرئيسية</span>
+    </a>
+    <a href="library.html" class="bottom-nav-item active">
+      <div class="bottom-nav-icon"><i class="fas fa-gamepad"></i></div>
+      <span>المكتبة</span>
+    </a>
+    <div class="bottom-nav-item bottom-nav-center" onclick="openMobileSearch()">
+      <div class="bottom-nav-icon-main"><i class="fas fa-search"></i></div>
+      <span>بحث</span>
+    </div>
+    <a href="videos.html" class="bottom-nav-item">
+      <div class="bottom-nav-icon"><i class="fas fa-play-circle"></i></div>
+      <span>المقاطع</span>
+    </a>
+    <a href="auth.html" class="bottom-nav-item" id="bn-login" style="display:none">
+      <div class="bottom-nav-icon"><i class="fas fa-sign-in-alt"></i></div>
+      <span>دخول</span>
+    </a>
+    <a href="profile.html" class="bottom-nav-item" id="bn-profile" style="display:none; position:relative">
+      <div class="bottom-nav-icon"><i class="fas fa-user-circle"></i></div>
+      <span class="nav-notif-badge"
+        style="position:absolute; top:-5px; left:50%; transform:translateX(10px); background:#ef4444; color:white; width:16px; height:16px; border-radius:50%; font-size:0.6rem; display:none; align-items:center; justify-content:center; font-weight:700; border:2px solid var(--bg);">0</span>
+      <span>حسابي</span>
+    </a>
+  </nav>
+
+  <script src="js/auth.js"></script>
+  <script src="js/game.js?v=3.0"></script>
+  <script>
+    window.addEventListener('firebaseDataReady', () => {
+      if (typeof injectNavAuth === 'function') injectNavAuth();
+    });
+  </script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/firebase-sync.js"></script>
+</body>
+
+</html>
