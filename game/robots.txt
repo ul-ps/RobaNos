@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard.html
+Disallow: /profile.html
+Disallow: /submit-game.html
+Disallow: /auth.html
+
+Sitemap: https://robanos.com/sitemap.xml
