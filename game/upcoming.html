@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <title>الألعاب القادمة - RobaNos</title>
+  <meta name="description" content="تعرف على أحدث الألعاب القادمة قريباً ومواعيد إصدارها حصرياً على RobaNos." />
+  <meta name="keywords" content="ألعاب قادمة, موعد صدور الألعاب, أخبار الألعاب, RobaNos" />
+  <meta name="author" content="RobaNos" />
+  <meta name="theme-color" content="#7c3aed" />
+  <link rel="canonical" href="https://robanos.com/upcoming.html" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://robanos.com/upcoming.html" />
+  <meta property="og:title" content="الألعاب القادمة - RobaNos" />
+  <meta property="og:description" content="تعرف على أحدث الألعاب القادمة قريباً ومواعيد إصدارها." />
+  <meta property="og:image" content="https://robanos.com/assets/favicon.png" />
+  <meta property="og:site_name" content="RobaNos" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://robanos.com/upcoming.html" />
+  <meta name="twitter:title" content="الألعاب القادمة - RobaNos" />
+  <meta name="twitter:description" content="تعرف على أحدث الألعاب القادمة قريباً ومواعيد إصدارها." />
+  <meta name="twitter:image" content="https://robanos.com/assets/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="js/theme.js"></script>
+  <script src="js/auth.js"></script>
+  <style>
+    .v-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 30px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+    }
+
+    .v-header::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      right: 0;
+      width: 60px;
+      height: 3px;
+      background: var(--gradient-primary);
+      border-radius: 10px;
+      box-shadow: 0 0 15px var(--primary);
+    }
+
+    .v-title h1 {
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 8px;
+      letter-spacing: -1px;
+    }
+
+    .v-title p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    .v-search {
+      position: relative;
+      width: 380px;
+    }
+
+    .v-search input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 14px 50px 14px 20px;
+      color: #fff;
+      outline: none;
+      transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(10px);
+    }
+
+    .v-search input:focus {
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow: 0 0 20px rgba(124, 58, 237, 0.15);
+    }
+
+    .v-search i {
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    .upcoming-container {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .upcoming-banner {
+      background: linear-gradient(rgba(30, 27, 75, 0.4), rgba(49, 46, 129, 0.8));
+      border-radius: 30px;
+      padding: 60px 40px;
+      height: 100%;
+      min-height: 400px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 30px;
+      transition: background 0.8s ease;
+    }
+
+    .banner-side-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .side-thumb {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 12px 15px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: 0.3s;
+      opacity: 0.6;
+      position: relative;
+      overflow: hidden;
+      flex: 1;
+    }
+
+    .side-thumb:hover {
+      opacity: 0.9;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .side-thumb.active {
+      opacity: 1;
+      border-color: var(--primary);
+      background: rgba(124, 58, 237, 0.1);
+      transform: scale(1.02);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .thumb-img {
+      width: 50px;
+      height: 50px;
+      border-radius: 10px;
+      background-size: cover;
+      background-position: center;
+      flex-shrink: 0;
+    }
+
+    .thumb-info h4 {
+      font-size: 0.85rem;
+      font-weight: 800;
+      margin-bottom: 2px;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .thumb-info p {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .status-line {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      width: 0%;
+      box-shadow: 0 0 10px var(--primary);
+      transition: width 0.1s linear;
+      border-radius: 0 2px 2px 0;
+    }
+
+    @media (max-width: 1100px) {
+      .upcoming-container {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .banner-side-nav {
+        flex-direction: row;
+        margin-top: -20px;
+        z-index: 10;
+        position: relative;
+        padding: 0 10px;
+        overflow-x: auto;
+        padding-bottom: 15px;
+        scrollbar-width: none;
+      }
+
+      .banner-side-nav::-webkit-scrollbar {
+        display: none;
+      }
+
+      .side-thumb {
+        min-width: 250px;
+        flex: 0 0 auto;
+        background: rgba(15, 23, 42, 0.8);
+        backdrop-filter: blur(10px);
+      }
+
+      .upcoming-banner {
+        border-radius: 30px 30px 0 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .v-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 20px;
+        padding-bottom: 20px;
+        margin-bottom: 30px;
+      }
+
+      .v-header::after {
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+        width: 80px;
+      }
+
+      .v-header-actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 12px;
+        max-width: 100% !important;
+      }
+
+      .v-search {
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+      }
+
+      .v-title h1 {
+        font-size: 2.2rem;
+      }
+
+      #btn-add-upcoming {
+        width: 100%;
+        justify-content: center;
+        max-width: 500px;
+        margin: 0 auto;
+      }
+
+      .upcoming-banner {
+        padding: 30px 20px;
+        min-height: 350px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        gap: 25px;
+      }
+
+      .upcoming-banner-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .upcoming-banner-content>div:last-child {
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .upcoming-banner h2 {
+        font-size: 1.8rem;
+      }
+
+      .countdown-timer {
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .countdown-unit {
+        width: 56px;
+        height: 65px;
+        border-radius: 14px;
+      }
+
+      .countdown-value {
+        font-size: 1.1rem;
+      }
+
+      .countdown-label {
+        font-size: 0.65rem;
+        margin-top: 4px;
+      }
+
+      .banner-released-badge {
+        font-size: 1.3rem;
+        padding: 12px 25px;
+        border-radius: 16px;
+        margin: 10px auto;
+      }
+
+      .banner-released-badge i {
+        font-size: 1.5rem;
+      }
+
+      .side-thumb {
+        min-width: 180px;
+        padding: 10px;
+      }
+
+      .content-wrapper {
+        padding: 12px 10px !important;
+      }
+
+      /* Mobile Grid: 2 columns */
+      .upcoming-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+      }
+
+      .up-card {
+        border-radius: 16px !important;
+        min-width: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+      }
+
+      .up-thumb {
+        height: 110px !important;
+      }
+
+      .up-info {
+        padding: 10px !important;
+        flex: 1 !important;
+        display: flex !important;
+        flex-direction: column !important;
+      }
+
+      .up-title {
+        font-size: 0.85rem !important;
+        margin-bottom: 2px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        line-height: 1.3 !important;
+      }
+
+      .up-cat {
+        font-size: 0.70rem !important;
+        margin-bottom: auto !important;
+      }
+
+      .up-progress-wrap {
+        margin-bottom: 12px !important;
+        margin-top: 12px !important;
+      }
+
+      .up-progress-label {
+        font-size: 0.65rem !important;
+        margin-bottom: 5px !important;
+      }
+
+      .up-actions {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 6px !important;
+      }
+
+      .up-btn {
+        padding: 8px !important;
+        font-size: 0.8rem !important;
+        border-radius: 10px !important;
+      }
+
+      .up-date-bubble {
+        padding: 4px 8px !important;
+        font-size: 0.65rem !important;
+        border-radius: 8px !important;
+        bottom: 8px !important;
+        left: 8px !important;
+      }
+
+      .up-status-overlay {
+        font-size: 0.55rem !important;
+        padding: 3px 6px !important;
+        top: 8px !important;
+        right: 8px !important;
+        border-radius: 6px !important;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr !important;
+        gap: 0 !important;
+      }
+
+      .modal-content {
+        padding: 30px 20px !important;
+        border-radius: 20px !important;
+      }
+
+      .modal-content h2 {
+        font-size: 1.6rem !important;
+        margin-bottom: 20px !important;
+      }
+    }
+
+    .upcoming-banner-content {
+      position: relative;
+      z-index: 2;
+      flex: 1;
+    }
+
+    .upcoming-banner h2 {
+      font-size: 2.8rem;
+      margin-bottom: 12px;
+      font-weight: 900;
+      text-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      letter-spacing: -1px;
+      color: aliceblue;
+    }
+
+    .upcoming-banner p {
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.6;
+      margin-bottom: 30px;
+      font-size: 1.15rem;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      max-width: 600px;
+    }
+
+    .countdown-timer {
+      display: flex;
+      gap: 15px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .countdown-unit {
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      width: 95px;
+      height: 105px;
+      border-radius: 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      border-bottom: 4px solid var(--primary);
+      transition: 0.3s ease;
+    }
+
+    .countdown-unit:hover {
+      transform: translateY(-5px);
+      border-bottom-color: var(--primary-light);
+      box-shadow: 0 25px 50px rgba(124, 58, 237, 0.2);
+    }
+
+    .countdown-value {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+
+    .countdown-label {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-top: 8px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      opacity: 0.8;
+    }
+
+    .banner-released-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 15px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #fff;
+      padding: 16px 40px;
+      border-radius: 20px;
+      font-size: 1.8rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      box-shadow: 0 15px 40px rgba(124, 58, 237, 0.4);
+      margin: 20px auto;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .banner-released-badge::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      animation: shineBadge 2.5s infinite;
+    }
+
+    .banner-released-badge i {
+      font-size: 2rem;
+    }
+
+    @keyframes shineBadge {
+      0% {
+        left: -100%;
+      }
+
+      20% {
+        left: 100%;
+      }
+
+      100% {
+        left: 100%;
+      }
+    }
+
+    .target-game-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(168, 85, 247, 0.2));
+      padding: 6px 16px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      border: 1px solid rgba(124, 58, 237, 0.4);
+      color: #fff;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 20px rgba(124, 58, 237, 0.2);
+    }
+
+    .upcoming-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 35px;
+      padding: 10px 0;
+    }
+
+    .up-card {
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(15px);
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .up-card:hover {
+      transform: translateY(-12px) scale(1.02);
+      border-color: var(--primary);
+      box-shadow: 0 20px 50px rgba(124, 58, 237, 0.3);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .up-thumb {
+      height: 220px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .up-status-overlay {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: var(--gradient-primary);
+      padding: 5px 12px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .up-date-bubble {
+      position: absolute;
+      bottom: 15px;
+      left: 15px;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      padding: 10px 18px;
+      border-radius: 16px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    .up-date-bubble i {
+      color: var(--primary-light);
+      animation: spinSlow 3s linear infinite;
+    }
+
+    @keyframes spinSlow {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .up-info {
+      padding: 30px;
+    }
+
+    .up-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    .up-cat {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .up-progress-wrap {
+      margin-bottom: 25px;
+    }
+
+    .up-progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .up-progress-bg {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .up-progress-inner {
+      height: 100%;
+      background: var(--gradient-primary);
+      border-radius: 10px;
+      width: 0;
+      transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .up-progress-inner::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      animation: progressGloss 2s infinite;
+    }
+
+    @keyframes progressGloss {
+      from {
+        transform: translateX(-100%);
+      }
+
+      to {
+        transform: translateX(100%);
+      }
+    }
+
+    .up-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .up-btn {
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+      font-family: inherit;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-trailer {
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      border: 1px solid var(--border);
+    }
+
+    .btn-notify {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+    }
+
+    .btn-notify:hover {
+      background: var(--primary-light);
+      box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .btn-notify.active {
+      background: rgba(16, 185, 129, 0.2);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      box-shadow: none;
+    }
+
+    .admin-controls {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      display: flex;
+      gap: 10px;
+      z-index: 10;
+      opacity: 0;
+      transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: translateX(-10px);
+    }
+
+    .up-card:hover .admin-controls {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .ctrl-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      transition: 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .ctrl-btn:hover {
+      transform: scale(1.1);
+      filter: brightness(1.2);
+    }
+
+    .ctrl-edit {
+      background: var(--gradient-primary);
+    }
+
+    .ctrl-del {
+      background: linear-gradient(135deg, #ef4444, #b91c1c);
+    }
+
+    .up-btn-top {
+      background: rgba(124, 58, 237, 0.1);
+      border: 1px solid rgba(124, 58, 237, 0.3);
+      color: var(--primary-light);
+      padding: 12px 24px;
+      border-radius: 14px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .up-btn-top:hover {
+      background: var(--primary);
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3);
+      border-color: transparent;
+    }
+
+    /* Modal Styling */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 20px;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--bg-card);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      width: 100%;
+      max-width: 600px;
+      border-radius: 24px;
+      padding: 40px;
+      position: relative;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      animation: modalIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .form-input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 14px 16px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+    }
+
+    .form-input option {
+      background: var(--bg-card) !important;
+      color: #fff;
+    }
+
+    .form-input:focus {
+      border-color: var(--primary);
+      outline: none;
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+    }
+
+    .form-input::placeholder {
+      color: rgba(255, 255, 255, 0.2);
+    }
+
+    .modal-content h2 {
+      color: #fff;
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-bottom: 25px !important;
+      text-align: center;
+    }
+
+    .modal-content h2 i {
+      color: var(--primary-light);
+      margin-left: 10px;
+    }
+
+    .modal-content .btn-primary {
+      width: 100%;
+      padding: 15px;
+      margin-top: 10px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .modal-content .btn-primary:hover {
+      background: var(--primary-light);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(124, 58, 237, 0.3);
+    }
+
+    .toast-container {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 10000;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 12px 20px;
+      color: #fff;
+      font-weight: 500;
+      min-width: 280px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      animation: toastIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      pointer-events: auto;
+    }
+
+    .toast.success {
+      border-left: 4px solid #10b981;
+    }
+
+    .toast.error {
+      border-left: 4px solid #ef4444;
+    }
+
+    .toast.out {
+      animation: toastOut 0.4s ease forwards;
+    }
+
+    /* Light Mode Support */
+    .light-mode .v-title h1 {
+      color: #0f172a;
+    }
+
+    .light-mode .v-title p {
+      color: #64748b;
+    }
+
+    .light-mode .v-search input {
+      background: #fff;
+      border-color: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .light-mode .section-header h3 {
+      color: #0f172a;
+    }
+
+    .light-mode .side-thumb {
+      background: #fff;
+      border-color: #e2e8f0;
+    }
+
+    .light-mode .side-thumb.active {
+      background: rgba(124, 58, 237, 0.05);
+    }
+
+    .light-mode .thumb-info h4 {
+      color: #0f172a;
+    }
+
+    .light-mode .up-card {
+      background: #fff;
+      border-color: #e2e8f0;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    }
+
+    .light-mode .up-card:hover {
+      background: #f8fafc;
+      box-shadow: 0 15px 35px rgba(124, 58, 237, 0.15);
+    }
+
+    .light-mode .up-title {
+      color: #0f172a;
+    }
+
+    .light-mode .up-cat {
+      color: #64748b;
+    }
+
+    .light-mode .btn-trailer {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .light-mode .countdown-unit {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: #e2e8f0;
+    }
+
+    .light-mode .countdown-value {
+      color: #0f172a;
+    }
+
+    .light-mode .countdown-label {
+      color: #64748b;
+    }
+
+    .light-mode .modal-content {
+      background: #fff;
+      border-color: #e2e8f0;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .light-mode .modal-content h2 {
+      color: #0f172a;
+    }
+
+    .light-mode .form-label {
+      color: #475569;
+    }
+
+    .light-mode .form-input {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+      color: #0f172a;
+    }
+
+    .light-mode .form-input:focus {
+      border-color: var(--primary);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+    }
+
+    .light-mode .form-input::placeholder {
+      color: #94a3b8;
+    }
+
+    .light-mode .form-input option {
+      background: #fff !important;
+      color: #0f172a !important;
+    }
+
+    .light-mode .modal-content .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 8px 15px rgba(124, 58, 237, 0.2);
+    }
+
+    .light-mode .modal-content .btn-primary:hover {
+      background: var(--primary-light);
+    }
+
+    .light-mode #btn-add-upcoming {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+      color: #475569;
+    }
+
+    .light-mode #btn-add-upcoming:hover {
+      background: var(--primary);
+      color: #fff;
+      border-color: transparent;
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes toastOut {
+      to {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.9);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .upcoming-banner {
+        padding: 20px 15px;
+        min-height: auto;
+      }
+
+      .upcoming-banner h2 {
+        font-size: 1.6rem;
+        line-height: 1.3;
+      }
+
+      .upcoming-banner p {
+        font-size: 0.95rem;
+        margin-bottom: 20px;
+        line-height: 1.5;
+      }
+
+      .countdown-timer {
+        gap: 8px;
+        flex-wrap: nowrap;
+      }
+
+      .countdown-unit {
+        width: 50px;
+        height: 60px;
+        border-radius: 12px;
+      }
+
+      .countdown-value {
+        font-size: 1.1rem;
+      }
+
+      .countdown-label {
+        font-size: 0.55rem;
+        margin-top: 2px;
+      }
+
+      .banner-released-badge {
+        font-size: 1rem;
+        padding: 8px 18px;
+      }
+
+      .banner-released-badge i {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="main-layout">
+    <!-- Sidebar -->
+    <aside class="g-sidebar">
+      <a href="index.html" class="g-logo">
+        <i class="fas fa-cubes"></i>
+        <span class="g-logo-text site-brand-name">RobaNos</span>
+      </a>
+
+      <div class="nav-search" style="margin-bottom: 30px; width: 100%;">
+        <input type="text" id="main-search" placeholder="ابحث عن لعبة..."
+          onkeydown="if(event.key==='Enter') window.location.href='index.html?search='+encodeURIComponent(this.value)"
+          style="width:100%" />
+        <i class="fas fa-search nav-search-icon" style="left: 15px; right: auto; cursor:pointer;"></i>
+      </div>
+      <ul class="g-nav">
+        <li><a href="index.html" class="g-nav-link"><i class="fas fa-home"></i> الرئيسية</a></li>
+        <li><a href="videos.html" class="g-nav-link"><i class="fas fa-play-circle"></i> الفيديوهات</a></li>
+        <li><a href="library.html" class="g-nav-link"><i class="fas fa-gamepad"></i> المكتبة</a></li>
+        <li><a href="upcoming.html" class="g-nav-link active"><i class="fas fa-calendar-alt"></i> قادمة قريباً</a></li>
+        <li style="margin: 10px 0; border-bottom: 1px solid var(--border); opacity: 0.5;"></li>
+        <li><a href="profile.html" class="g-nav-link" id="nav-user-link" style="display:none; position:relative;"><i
+              class="fas fa-user-circle"></i> ملفي الشخصي <span class="nav-notif-badge"
+              style="position:absolute; top:50%; left:20px; transform:translateY(-50%); background:#ef4444; color:white; width:18px; height:18px; border-radius:50%; font-size:0.7rem; display:none; align-items:center; justify-content:center; font-weight:700; border:2px solid var(--bg-card);">0</span></a>
+        </li>
+        <li><a href="auth.html" class="g-nav-link" id="nav-auth-btn" style="display:none"><i
+              class="fas fa-sign-in-alt"></i> تسجيل الدخول</a></li>
+        <li><a href="#" class="g-nav-link" id="nav-logout-btn" onclick="logout(); return false;"
+            style="display:none; color:#f87171"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a></li>
+        <li style="margin: 10px 0; border-bottom: 1px solid var(--border); opacity: 0.5;"></li>
+        <li><a href="submit-game.html" class="g-nav-link" id="nav-submit-btn" style="display:none"><i
+              class="fas fa-upload"></i> أرسل لعبتك</a></li>
+        <li><a href="dashboard.html" class="g-nav-link" id="nav-dash-btn" style="display:none"><i
+              class="fas fa-sliders-h"></i> لوحة التحكم</a></li>
+      </ul>
+      <div class="g-theme-trigger" id="theme-toggle">
+        <i class="fas fa-moon"></i>
+        <span>تبديل الوضع</span>
+      </div>
+    </aside>
+
+    <!-- Content -->
+    <div class="content-wrapper" style="padding: 20px 40px;">
+      <header class="v-header">
+        <div class="v-title">
+          <h1>الألعاب القادمة</h1>
+          <p>استكشف العناوين المنتظرة ومواعيد إصدارها.</p>
+        </div>
+        <div class="v-header-actions" style="display: flex; align-items: center; gap: 15px; justify-content: flex-end;">
+          <button class="up-btn-top" style="display: none; white-space: nowrap;" onclick="openUpModal()">
+            <i class="fas fa-plus-circle"></i> إضافة لعبة قادمة
+          </button>
+          <div class="v-search">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="ابحث عن ألعاب قادمة..." id="up-search-input">
+          </div>
+        </div>
+      </header>
+
+      <div class="upcoming-container">
+        <div class="upcoming-banner" id="main-banner">
+          <!-- Dynamic Slider Content -->
+        </div>
+        <div class="banner-side-nav" id="banner-side-nav">
+          <!-- Dynamic Thumbnails -->
+        </div>
+      </div>
+
+      <div class="section-header"
+        style="margin-top: 50px; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 12px; justify-content: flex-start; direction: rtl;">
+        <i class="fas fa-fire" style="color: var(--primary); font-size: 1.4rem;"></i>
+        <h3 style="font-size: 1.5rem; font-weight: 800; color: inherit;">جميع العناوين المنتظرة</h3>
+      </div>
+      <div class="upcoming-grid" id="upcoming-grid">
+        <!-- Upcoming Games Load Here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Upcoming Game Modal -->
+  <div id="up-modal" class="modal-overlay">
+    <div class="modal-content">
+      <h2 style="margin-bottom: 25px;"><i class="fas fa-calendar-plus"></i> إضافة لعبة قادمة</h2>
+      <form id="up-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">اسم اللعبة</label>
+            <input type="text" class="form-input" id="up-title" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">المطور / الشركة</label>
+            <input type="text" class="form-input" id="up-developer" placeholder="اسم الشركة المطورة" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">التصنيف</label>
+            <select class="form-input" id="up-cat" required>
+              <option value="" disabled selected>اختر التصنيف...</option>
+              <option>أكشن</option>
+              <option>مغامرات</option>
+              <option>رعب</option>
+              <option>RPG</option>
+              <option>سباقات</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">موعد الإصدار الدقيق (للعداد)</label>
+            <input type="date" class="form-input" id="up-precise-date" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">رابط العرض (Trailer)</label>
+            <input type="url" class="form-input" id="up-trailer" placeholder="رابط يوتيوب..." />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">وصف اللعبة (المقال)</label>
+          <textarea class="form-input" id="up-desc" rows="4"
+            placeholder="اكتب تفاصيل عن القصة، أسلوب اللعب، إلخ..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">رابط الصورة (Image URL)</label>
+          <input type="url" class="form-input" id="up-img" placeholder="رابط صورة اللعبة..." />
+        </div>
+        <button type="submit" class="btn-primary" style="width:100%; padding: 15px; margin-top:10px;">
+          <i class="fas fa-save"></i> حفظ اللعبة
+        </button>
+      </form>
+      <button onclick="closeUpModal()"
+        style="position:absolute; top:20px; left:20px; background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
+    </div>
+  </div>
+
+  <div id="confirm-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 400px; text-align: center;">
+      <div style="font-size: 3rem; color: #ef4444; margin-bottom: 20px;"><i class="fas fa-exclamation-triangle"></i>
+      </div>
+      <h2 style="margin-bottom: 10px;">هل أنت متأكد؟</h2>
+      <p style="color: var(--text-muted); margin-bottom: 30px;">هل تريد فعلاً حذف هذه اللعبة؟</p>
+      <div style="display: flex; gap: 15px; justify-content: center;">
+        <button class="up-btn btn-trailer" style="padding: 10px 25px" onclick="closeConfirmModal()">إلغاء</button>
+        <button id="confirm-delete-btn" class="up-btn btn-notify" style="background:#ef4444; padding: 10px 25px">حذف
+          الآن</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Search Overlay -->
+  <div class="mobile-search-overlay" id="mobile-search-overlay" onclick="closeMobileSearch(event)">
+    <div class="mobile-search-box">
+      <div class="mobile-search-inner" onclick="event.stopPropagation()">
+        <i class="fas fa-search" style="color:var(--text-muted)"></i>
+        <input type="text" id="mobile-search-input" placeholder="ابحث عن لعبة..."
+          onkeydown="if(event.key==='Enter') { if(typeof globalSearch === 'function') globalSearch(this.value); else window.location.href='library.html?search='+encodeURIComponent(this.value); closeMobileSearch(); }">
+        <i class="fas fa-times" style="color:var(--text-dim); padding:10px; margin:-10px; cursor:pointer;"
+          onclick="closeMobileSearch({target: this})"></i>
+      </div>
+    </div>
+  </div>
+
+  </div>
+  </div>
+
+  <nav class="bottom-nav" id="bottom-nav">
+    <a href="index.html" class="bottom-nav-item">
+      <div class="bottom-nav-icon"><i class="fas fa-home"></i></div>
+      <span>الرئيسية</span>
+    </a>
+    <a href="upcoming.html" class="bottom-nav-item active">
+      <div class="bottom-nav-icon"><i class="fas fa-calendar-alt"></i></div>
+      <span>قريباً</span>
+    </a>
+    <a href="library.html" class="bottom-nav-item bottom-nav-center">
+      <div class="bottom-nav-icon-main"><i class="fas fa-gamepad"></i></div>
+      <span>المكتبة</span>
+    </a>
+      
+    <a href="videos.html" class="bottom-nav-item">
+      <div class="bottom-nav-icon"><i class="fas fa-play-circle"></i></div>
+      <span>المقاطع</span>
+    </a>
+    <a href="auth.html" class="bottom-nav-item" id="bn-login" style="display:none">
+      <div class="bottom-nav-icon"><i class="fas fa-sign-in-alt"></i></div>
+      <span>دخول</span>
+    </a>
+    <a href="profile.html" class="bottom-nav-item" id="bn-profile" style="display:none; position:relative">
+      <div class="bottom-nav-icon"><i class="fas fa-user-circle"></i></div>
+      <span class="nav-notif-badge"
+        style="position:absolute; top:-5px; left:50%; transform:translateX(10px); background:#ef4444; color:white; width:16px; height:16px; border-radius:50%; font-size:0.6rem; display:none; align-items:center; justify-content:center; font-weight:700; border:2px solid var(--bg);">0</span>
+      <span>حسابي</span>
+    </a>
+  </nav>
+
+  <script src="js/upcoming.js"></script>
+  <script>
+    window.addEventListener('firebaseDataReady', () => {
+      if (typeof injectNavAuth === 'function') injectNavAuth();
+      if (typeof isAdmin === 'function' && isAdmin()) {
+        const btn = document.getElementById('btn-add-upcoming');
+        if (btn) btn.style.display = 'block';
+      }
+    });
+
+    function toggleMobileSearch() {
+      const overlay = document.getElementById('mobile-search-overlay');
+      const isOpen = overlay.classList.toggle('active');
+      if (isOpen) {
+        setTimeout(() => document.getElementById('mobile-search-input')?.focus(), 300);
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
+      }
+    }
+
+    function closeMobileSearch(e) {
+      if (e && e.target && e.target !== document.getElementById('mobile-search-overlay') && !e.target.classList.contains('fa-times')) return;
+      document.getElementById('mobile-search-overlay').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function openUpModal() { document.getElementById('up-modal').classList.add('active'); }
+    function closeUpModal() {
+      document.getElementById('up-modal').classList.remove('active');
+      document.getElementById('up-form').reset();
+      window.currentEditingUpId = null;
+    }
+    function closeConfirmModal() { document.getElementById('confirm-modal').classList.remove('active'); }
+
+    function showToast(msg, type = 'success') {
+      let container = document.querySelector('.toast-container');
+      if (!container) {
+        container = document.createElement('div');
+        container.className = 'toast-container';
+        document.body.appendChild(container);
+      }
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      const icon = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+      toast.innerHTML = `<i class="${icon}"></i><span>${msg}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => { toast.classList.add('out'); setTimeout(() => toast.remove(), 400); }, 4000);
+    }
+  </script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/firebase-sync.js"></script>
+</body>
+
+</html>

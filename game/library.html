@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <title>مكتبة الألعاب - RobaNos</title>
+  <meta name="description" content="استعرض مكتبة ألعاب RobaNos الكاملة مرتبةً حسب الفئة وتصفح أحدث ألعاب الأكشن والرياضة والمغامرات." />
+  <meta name="keywords" content="مكتبة ألعاب, تصفح ألعاب, ألعاب كمبيوتر, ألعاب PC, ألعاب رعب, RobaNos" />
+  <meta name="author" content="RobaNos" />
+  <meta name="theme-color" content="#7c3aed" />
+  <link rel="canonical" href="https://robanos.com/library.html" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://robanos.com/library.html" />
+  <meta property="og:title" content="مكتبة الألعاب - RobaNos" />
+  <meta property="og:description" content="استعرض مكتبة ألعاب RobaNos الكاملة مرتبةً حسب الفئة وتصفح أحدث الألعاب." />
+  <meta property="og:image" content="https://robanos.com/assets/favicon.png" />
+  <meta property="og:site_name" content="RobaNos" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://robanos.com/library.html" />
+  <meta name="twitter:title" content="مكتبة الألعاب - RobaNos" />
+  <meta name="twitter:description" content="استعرض مكتبة ألعاب RobaNos الكاملة مرتبةً حسب الفئة وتصفح أحدث الألعاب." />
+  <meta name="twitter:image" content="https://robanos.com/assets/favicon.png" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="js/theme.js"></script>
+  <style>
+    /* ===== LIBRARY PAGE ===== */
+    .lib-hero {
+      padding: 120px 20px 50px;
+      text-align: center;
+      background: radial-gradient(circle at 50% 0%, rgba(168, 85, 247, 0.12), transparent 70%);
+    }
+
+    .lib-hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(99, 102, 241, 0.15));
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      border-radius: 50px;
+      padding: 7px 20px;
+      font-size: 0.85rem;
+      color: var(--primary-light);
+      margin-bottom: 22px;
+    }
+
+    .lib-hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 14px;
+      line-height: 1.2;
+    }
+
+    .lib-hero h1 span {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .lib-hero p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 550px;
+      margin: 0 auto 30px;
+      line-height: 1.7;
+    }
+
+    /* Search & Filter Bar */
+    .lib-toolbar {
+      max-width: 900px;
+      margin: 0 auto 50px;
+      padding: 0 20px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lib-search-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 240px;
+      max-width: 420px;
+    }
+
+    .lib-search {
+      width: 100%;
+      padding: 14px 20px 14px 46px;
+      background: var(--bg-card);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.25s;
+    }
+
+    .lib-search:focus {
+      border-color: var(--primary-light);
+    }
+
+    .lib-search::placeholder {
+      color: var(--text-muted);
+    }
+
+    .lib-search-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 1rem;
+      pointer-events: none;
+    }
+
+    .lib-filter-btns {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .lib-filter-btn {
+      padding: 10px 18px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.25s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .lib-filter-btn:hover {
+      border-color: var(--primary-light);
+      color: var(--primary-light);
+    }
+
+    .lib-filter-btn.active {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(99, 102, 241, 0.2));
+      border-color: var(--primary-light);
+      color: var(--primary-light);
+      font-weight: 600;
+    }
+
+    /* Content */
+    .lib-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 20px 80px;
+    }
+
+    /* Category Section */
+    .lib-category-section {
+      margin-bottom: 60px;
+    }
+
+    .lib-category-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .lib-cat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      color: #ffffff;
+    }
+
+    .lib-cat-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .lib-cat-count {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.05);
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    .lib-cat-line {
+      flex: 1;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .lib-see-all {
+      font-size: 0.85rem;
+      color: var(--primary-light);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 600;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+
+    .lib-see-all:hover {
+      opacity: 0.75;
+    }
+
+    /* No results */
+    .lib-empty {
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--text-muted);
+    }
+
+    .lib-empty-icon {
+      font-size: 3.5rem;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .lib-empty h3 {
+      color: var(--text);
+      margin-bottom: 8px;
+      font-size: 1.3rem;
+    }
+
+    /* Light Mode */
+    .light-mode .lib-search {
+      background: #ffffff;
+      border-color: rgba(0, 0, 0, 0.08);
+    }
+
+    .light-mode .lib-see-all {
+      color: var(--primary);
+    }
+
+    .light-mode .lib-see-all:hover {
+      color: #6d28d9; /* explicit dark primary */
+      opacity: 1;
+    }
+
+    .light-mode .lib-filter-btn {
+      background: #ffffff;
+      border-color: rgba(0, 0, 0, 0.08);
+    }
+
+    .light-mode .lib-filter-btn.active {
+      background: rgba(168, 85, 247, 0.08);
+    }
+
+    .light-mode .lib-category-header {
+      border-color: rgba(0, 0, 0, 0.06);
+    }
+
+    .light-mode .lib-cat-count {
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    .light-mode .lib-cat-line {
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    @media (max-width: 600px) {
+      .lib-hero {
+        padding: 100px 15px 30px;
+      }
+
+      .lib-cat-title {
+        font-size: 1.2rem;
+      }
+
+      .lib-cat-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="bg-particles"></div>
+  <canvas id="bg-canvas"></canvas>
+
+  <div class="main-layout">
+    <!-- Sidebar -->
+    <aside class="g-sidebar">
+      <a href="index.html" class="g-logo">
+        <i class="fas fa-cubes"></i>
+        <span class="g-logo-text site-brand-name">RobaNos</span>
+      </a>
+
+      <div class="nav-search" style="margin-bottom: 30px; width: 100%;">
+        <input type="text" id="main-search" placeholder="ابحث عن لعبة..."
+          onkeydown="if(event.key==='Enter') globalSearch(this.value)" style="width:100%" />
+        <i class="fas fa-search nav-search-icon" style="left: 15px; right: auto; cursor:pointer;"
+          onclick="globalSearch(document.getElementById('main-search').value)"></i>
+      </div>
+
+      <ul class="g-nav">
+        <li><a href="index.html" class="g-nav-link"><i class="fas fa-home"></i> الرئيسية</a></li>
+        <li><a href="videos.html" class="g-nav-link"><i class="fas fa-play-circle"></i> الفيديوهات</a></li>
+        <li><a href="library.html" class="g-nav-link active"><i class="fas fa-gamepad"></i> المكتبة</a></li>
+        <li><a href="upcoming.html" class="g-nav-link"><i class="fas fa-calendar-alt"></i> قادمة قريباً</a></li>
+        <li style="margin: 10px 0; border-bottom: 1px solid var(--border); opacity: 0.5;"></li>
+        <li><a href="profile.html" class="g-nav-link" id="nav-user-link" style="display:none; position:relative;"><i
+              class="fas fa-user-circle"></i> ملفي الشخصي <span class="nav-notif-badge"
+              style="position:absolute; top:50%; left:20px; transform:translateY(-50%); background:#ef4444; color:white; width:18px; height:18px; border-radius:50%; font-size:0.7rem; display:none; align-items:center; justify-content:center; font-weight:700; border:2px solid var(--bg-card);">0</span></a>
+        </li>
+        <li><a href="auth.html" class="g-nav-link" id="nav-auth-btn" style="display:none"><i
+              class="fas fa-sign-in-alt"></i> تسجيل الدخول</a></li>
+        <li><a href="#" class="g-nav-link" id="nav-logout-btn" onclick="logout(); return false;"
+            style="display:none; color:#f87171"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a></li>
+        <li style="margin: 10px 0; border-bottom: 1px solid var(--border); opacity: 0.5;"></li>
+        <li><a href="submit-game.html" class="g-nav-link" id="nav-submit-btn" style="display:none"><i
+              class="fas fa-upload"></i> أرسل لعبتك</a></li>
+        <li><a href="dashboard.html" class="g-nav-link" id="nav-dash-btn" style="display:none"><i
+              class="fas fa-sliders-h"></i> لوحة التحكم</a></li>
+      </ul>
+
+      <!-- Theme Toggle -->
+      <div class="g-theme-trigger" id="theme-toggle">
+        <i class="fas fa-moon"></i>
+        <span>تبديل الوضع</span>
+      </div>
+    </aside>
+
+    <div class="content-wrapper">
+      <!-- Hero -->
+      <section class="lib-hero" style="padding: 60px 20px 40px;">
+        <div class="lib-hero-badge"><i class="fas fa-gamepad"></i> المكتبة الكاملة</div>
+        <h1>استعرض <span>كل الألعاب</span></h1>
+        <p>اكتشف مئات الألعاب مصنّفةً حسب الفئة — أكشن، مغامرات، RPG، وأكثر!</p>
+      </section>
+
+      <!-- Toolbar -->
+      <div class="lib-toolbar" style="flex-direction: column; align-items: stretch; gap: 20px; background: rgba(255,255,255,0.02); padding: 25px; border-radius: 20px; border: 1px solid var(--border);">
+        <div class="lib-search-wrap" style="width: 100%; max-width: 100%;">
+          <i class="fas fa-search lib-search-icon"></i>
+          <input type="text" class="lib-search" id="lib-search" placeholder="ابحث عن لعبة أو فئة..."
+            oninput="applyLibFilter()" style="width: 100%; border-radius: 14px;" />
+        </div>
+
+        <div style="width: 100%; height: 1px; background: var(--border); margin: 5px 0; opacity: 0.5;"></div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 30px;">
+          <!-- Category Filters -->
+          <div style="flex: 1; min-width: 250px;">
+            <div style="font-size: 0.95rem; color: var(--text); margin-bottom: 12px; font-weight: 700; display:flex; align-items:center; gap:8px;">
+              <i class="fas fa-shapes" style="color:var(--primary-light)"></i> تصفية حسب الفئة
+            </div>
+            <div class="lib-filter-btns" id="lib-filter-btns" style="justify-content: flex-start;">
+              <button class="lib-filter-btn active" data-cat="all" onclick="setLibCat('all', this)">
+                <i class="fas fa-th-large"></i> كل الفئات
+              </button>
+            </div>
+          </div>
+          
+          <!-- Platform Filters -->
+          <div style="flex: 1; min-width: 250px;">
+            <div style="font-size: 0.95rem; color: var(--text); margin-bottom: 12px; font-weight: 700; display:flex; align-items:center; gap:8px;">
+              <i class="fas fa-laptop-code" style="color:var(--primary-light)"></i> تصفية حسب المنصة
+            </div>
+            <div class="lib-filter-btns" id="lib-platform-btns" style="justify-content: flex-start;">
+              <button class="lib-filter-btn active" data-plat="all" onclick="setLibPlat('all', this)">
+                <i class="fas fa-desktop"></i> كل المنصات
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <main class="lib-content" id="lib-content">
+        <div style="text-align:center;padding:100px;color:var(--text-muted)">
+          <i class="fas fa-spinner fa-spin" style="font-size:2rem;color:var(--primary-light)"></i>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <div class="toast-container" id="toast-container"></div>
+  <!-- Mobile Search Overlay -->
+  <div class="mobile-search-overlay" id="mobile-search-overlay" onclick="closeMobileSearch(event)">
+    <div class="mobile-search-box">
+      <div class="mobile-search-inner" onclick="event.stopPropagation()">
+        <i class="fas fa-search" style="color:var(--text-muted)"></i>
+        <input type="text" id="mobile-search-input" placeholder="ابحث عن لعبة..."
+          onkeydown="if(event.key==='Enter') { if(typeof globalSearch === 'function') globalSearch(this.value); else window.location.href='library.html?search='+encodeURIComponent(this.value); closeMobileSearch(); }">
+        <i class="fas fa-times" style="color:var(--text-dim); padding:10px; margin:-10px; cursor:pointer;"
+          onclick="closeMobileSearch({target: this})"></i>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav" id="bottom-nav">
+    <a href="index.html" class="bottom-nav-item">
+      <div class="bottom-nav-icon"><i class="fas fa-home"></i></div>
+      <span>الرئيسية</span>
+    </a>
+    <a href="upcoming.html" class="bottom-nav-item">
+      <div class="bottom-nav-icon"><i class="fas fa-calendar-alt"></i></div>
+      <span>قريباً</span>
+    </a>
+    <a href="library.html" class="bottom-nav-item bottom-nav-center active">
+      <div class="bottom-nav-icon-main"><i class="fas fa-gamepad"></i></div>
+      <span>المكتبة</span>
+    </a>
+      
+    <a href="videos.html" class="bottom-nav-item">
+      <div class="bottom-nav-icon"><i class="fas fa-play-circle"></i></div>
+      <span>المقاطع</span>
+    </a>
+    <a href="auth.html" class="bottom-nav-item" id="bn-login" style="display:none">
+      <div class="bottom-nav-icon"><i class="fas fa-sign-in-alt"></i></div>
+      <span>دخول</span>
+    </a>
+    <a href="profile.html" class="bottom-nav-item" id="bn-profile" style="display:none; position:relative">
+      <div class="bottom-nav-icon"><i class="fas fa-user-circle"></i></div>
+      <span class="nav-notif-badge"
+        style="position:absolute; top:-5px; left:50%; transform:translateX(10px); background:#ef4444; color:white; width:16px; height:16px; border-radius:50%; font-size:0.6rem; display:none; align-items:center; justify-content:center; font-weight:700; border:2px solid var(--bg);">0</span>
+      <span>حسابي</span>
+    </a>
+  </nav>
+
+  <script src="js/auth.js"></script>
+  <script>
+    // =============================================
+    //  LIBRARY PAGE LOGIC
+    // =============================================
+
+    const LIB_GAMES_DATA = [];
+
+    const CATEGORY_META = {
+      'أكشن': { icon: getCategoryIcon('أكشن'), gradient: 'linear-gradient(135deg,#7f1d1d,#991b1b)', color: '#fca5a5' },
+      'مغامرات': { icon: getCategoryIcon('مغامرات'), gradient: 'linear-gradient(135deg,#14532d,#166534)', color: '#86efac' },
+      'رياضة': { icon: getCategoryIcon('رياضة'), gradient: 'linear-gradient(135deg,#1e3a8a,#1d4ed8)', color: '#93c5fd' },
+      'RPG': { icon: getCategoryIcon('RPG'), gradient: 'linear-gradient(135deg,#4c1d95,#6d28d9)', color: '#c4b5fd' },
+      'إستراتيجية': { icon: getCategoryIcon('إستراتيجية'), gradient: 'linear-gradient(135deg,#713f12,#92400e)', color: '#fcd34d' },
+      'هدوء': { icon: getCategoryIcon('هدوء'), gradient: 'linear-gradient(135deg,#0c4a6e,#0369a1)', color: '#7dd3fc' },
+      'رعب': { icon: getCategoryIcon('رعب'), gradient: 'linear-gradient(135deg,#111827,#374151)', color: '#9ca3af' },
+      'سباقات': { icon: getCategoryIcon('سباقات'), gradient: 'linear-gradient(135deg,#991b1b,#ef4444)', color: '#f87171' },
+      'تعليمية': { icon: getCategoryIcon('تعليمية'), gradient: 'linear-gradient(135deg,#0f766e,#14b8a6)', color: '#5eead4' },
+      'محاكاة': { icon: getCategoryIcon('محاكاة'), gradient: 'linear-gradient(135deg,#3f6212,#84cc16)', color: '#bef264' }
+    };
+
+    const BADGE_LABELS = {
+      hot: '<i class="fas fa-fire-alt"></i> رائج',
+      new: '<i class="fas fa-bolt"></i> جديد',
+      free: '<i class="fas fa-gift"></i> مجاني',
+      early: '<i class="fas fa-rocket"></i> وصول مبكر'
+    };
+
+    const PLATFORM_ICONS = {
+      'Windows': 'fab fa-windows',
+      'Android': 'fab fa-android',
+      'Mac': 'fab fa-apple',
+      'iOS': 'fab fa-apple',
+      'Linux': 'fab fa-linux',
+      'Web': 'fas fa-globe',
+      'PlayStation': 'fab fa-playstation',
+      'Xbox': 'fab fa-xbox',
+      'Nintendo': 'fas fa-gamepad'
+    };
+
+    const PLATFORM_LABELS = {
+      'Windows': 'ويندوز',
+      'Android': 'أندرويد',
+      'Mac': 'ماك',
+      'iOS': 'آي أو إس',
+      'Linux': 'لينكس',
+      'Web': 'متصفح',
+      'PlayStation': 'بلاستيشن',
+      'Xbox': 'إكس بوكس',
+      'Nintendo': 'نينتندو'
+    };
+
+    let currentCat = 'all';
+    let currentPlat = 'all';
+    let allGames = [];
+
+    // Merge extra games from localStorage
+    function loadAllGames() {
+      try {
+        const extra = JSON.parse(localStorage.getItem('gv_extra_games') || '[]');
+        const filteredExtra = extra.filter(g => !g.type);
+        return [...LIB_GAMES_DATA, ...filteredExtra].sort((a, b) => (parseFloat(b.id) || 0) - (parseFloat(a.id) || 0));
+      } catch (e) { return [...LIB_GAMES_DATA]; }
+    }
+
+    // Build category filter buttons
+    function buildFilterButtons(games) {
+      const cats = [...new Set(games.map(g => g.category))];
+      const container = document.getElementById('lib-filter-btns');
+      cats.forEach(cat => {
+        const meta = CATEGORY_META[cat] || { icon: '🎮', color: '#a78bfa' };
+        const btn = document.createElement('button');
+        btn.className = 'lib-filter-btn';
+        btn.dataset.cat = cat;
+        btn.onclick = () => setLibCat(cat, btn);
+        btn.innerHTML = `${meta.icon} ${cat}`;
+        container.appendChild(btn);
+      });
+    }
+
+    // Build platform filter buttons
+    function buildPlatformFilterButtons(games) {
+      const allPlats = new Set();
+      games.forEach(g => {
+        if (g.platforms && Array.isArray(g.platforms)) {
+          g.platforms.forEach(p => allPlats.add(p));
+        }
+      });
+      const plats = [...allPlats];
+      const container = document.getElementById('lib-platform-btns');
+      if (!container) return;
+
+      plats.forEach(p => {
+        const btn = document.createElement('button');
+        btn.className = 'lib-filter-btn';
+        btn.dataset.plat = p;
+        btn.onclick = () => setLibPlat(p, btn);
+        const icon = PLATFORM_ICONS[p] || 'fas fa-gamepad';
+        const label = PLATFORM_LABELS[p] || p;
+        btn.innerHTML = `<i class="${icon}"></i> ${label}`;
+        container.appendChild(btn);
+      });
+    }
+
+    function setLibCat(cat, el) {
+      currentCat = cat;
+      document.querySelectorAll('#lib-filter-btns .lib-filter-btn').forEach(b => b.classList.remove('active'));
+      if (el) el.classList.add('active');
+      applyLibFilter();
+    }
+
+    function setLibPlat(plat, el) {
+      currentPlat = plat;
+      document.querySelectorAll('#lib-platform-btns .lib-filter-btn').forEach(b => b.classList.remove('active'));
+      if (el) el.classList.add('active');
+      applyLibFilter();
+    }
+
+    function applyLibFilter() {
+      const query = document.getElementById('lib-search').value.toLowerCase().trim();
+      const filtered = allGames.filter(g => {
+        const matchCat = currentCat === 'all' || g.category === currentCat;
+        const matchPlat = currentPlat === 'all' || (g.platforms && g.platforms.includes(currentPlat));
+        const matchQ = !query || g.name.toLowerCase().includes(query) || g.category.includes(query);
+        return matchCat && matchPlat && matchQ;
+      });
+      renderLibrary(filtered);
+    }
+
+    function renderLibrary(games) {
+      const content = document.getElementById('lib-content');
+      if (!games.length) {
+        content.innerHTML = `
+      <div class="lib-empty">
+        <div class="lib-empty-icon">🔍</div>
+        <h3>لا توجد ألعاب</h3>
+        <p>لم يتم العثور على ألعاب تطابق بحثك.</p>
+      </div>`;
+        return;
+      }
+
+      // Group by category
+      const grouped = {};
+      games.forEach(g => {
+        if (!grouped[g.category]) grouped[g.category] = [];
+        grouped[g.category].push(g);
+      });
+
+      let html = '';
+      Object.entries(grouped).forEach(([cat, catGames]) => {
+        const meta = CATEGORY_META[cat] || { icon: '🎮', gradient: 'linear-gradient(135deg,#1e1b4b,#312e81)', color: '#a78bfa' };
+        html += `
+      <section class="lib-category-section" id="cat-${cat}">
+        <div class="lib-category-header">
+          <div class="lib-cat-icon" style="background:${meta.gradient};">${meta.icon}</div>
+          <div class="lib-cat-title">${cat}</div>
+          <div class="lib-cat-count">${catGames.length} لعبة</div>
+          <div class="lib-cat-line"></div>
+          <a href="#" class="lib-see-all" onclick="setLibCat('${cat}', null); document.querySelector('[data-cat=\\'${cat}\\']')?.classList.add('active'); return false;">
+            عرض الكل <i class="fas fa-arrow-left"></i>
+          </a>
+        </div>
+        <div class="games-grid">
+          ${catGames.map((g, i) => renderGameCard(g, i)).join('')}
+        </div>
+      </section>`;
+      });
+
+      content.innerHTML = html;
+    }
+
+    function renderGameCard(g, i) {
+      const CATEGORY_COLORS = {
+        'أكشن': 'hsl(350,80%,15%), hsl(10,70%,10%)',
+        'مغامرات': 'hsl(140,60%,15%), hsl(160,50%,10%)',
+        'رياضة': 'hsl(210,80%,15%), hsl(230,70%,10%)',
+        'RPG': 'hsl(280,60%,15%), hsl(300,50%,10%)',
+        'إستراتيجية': 'hsl(40,80%,15%), hsl(20,70%,10%)',
+        'هدوء': 'hsl(180,50%,15%), hsl(200,40%,10%)',
+        'رعب': 'hsl(0,0%,15%), hsl(0,0%,5%)',
+        'سباقات': 'hsl(0,80%,15%), hsl(0,60%,10%)',
+        'تعليمية': 'hsl(170,80%,15%), hsl(180,70%,10%)',
+        'محاكاة': 'hsl(80,80%,15%), hsl(90,70%,10%)'
+      };
+      const colors = CATEGORY_COLORS[g.category] || 'hsl(260,50%,12%), hsl(280,40%,9%)';
+      const stars = '★'.repeat(Math.floor(g.rating)) + (g.rating % 1 >= 0.5 ? '½' : '');
+      const badge = g.badge ? `<span class="game-badge badge-${g.badge}">${BADGE_LABELS[g.badge] || g.badge}</span>` : '';
+      const key = `gv_dl_${g.id}`;
+      const dlCount = parseInt(localStorage.getItem(key) || g.downloads || 0);
+
+      return `
+    <div class="game-card" style="animation-delay:${i * 0.07}s" onclick="window.location.href='game.html?id=${g.id}'">
+      <div class="game-cover">
+        <div class="game-cover-emoji" style="${g.imageUrl ? `background:url('${g.imageUrl}') center/cover no-repeat;color:transparent;text-shadow:none;` : `background:linear-gradient(135deg,${colors})`}">${getCategoryIcon(g.category, g.emoji)}</div>
+        <div class="game-cover-shine"></div>
+        ${badge}
+        <div class="game-cover-overlay">
+          <div class="game-play-btn"><i class="${getBranding().logo} site-brand-icon"></i></div>
+        </div>
+      </div>
+      <div class="game-info" style="display:flex; flex-direction:column; flex:1;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+          <div>
+            <div class="game-category" style="margin-bottom:4px;">${g.category}</div>
+            ${g.status === 'featured' ? '<span style="display:inline-block;color:var(--primary-light);font-size:0.65rem;font-weight:800;background:rgba(124,58,237,0.15);padding:2px 8px;border-radius:6px;border:1px solid rgba(124,58,237,0.2);"><i class="fas fa-gem" style="margin-left:3px"></i>اختيارنا</span>' : ''}
+          </div>
+          <div style="background:rgba(251,191,36,0.12); border:1px solid rgba(251,191,36,0.25); border-radius:8px; padding:4px 8px; display:flex; align-items:center; gap:4px; box-shadow:0 0 10px rgba(251,191,36,0.1);">
+            <span style="color:#fbbf24; font-weight:800; font-size:0.85rem; line-height:1;">${g.rating}</span>
+            <i class="fas fa-star" style="color:#fbbf24; font-size:0.75rem;"></i>
+          </div>
+        </div>
+        
+        <div class="game-name" style="margin-bottom:6px;">${g.name}</div>
+        ${g.company ? `<div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:12px; display:flex; align-items:center;"><i class="fas fa-building" style="margin-left:6px; color:var(--primary-light); opacity:0.8;"></i>${g.company}</div>` : ''}
+        
+        <div style="margin-top:auto; padding-top:12px;">
+          ${g.submittedBy ? `
+          <div style="display:flex; align-items:center; gap:10px; padding:6px 10px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.05); border-radius:14px; width:100%; transition:all 0.3s; cursor:pointer;" onmouseover="this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
+            <div style="width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg, var(--primary), var(--accent)); display:flex; align-items:center; justify-content:center; color:white; font-size:0.75rem; box-shadow:0 4px 10px rgba(124,58,237,0.3); flex-shrink:0;"><i class="fas fa-user-astronaut"></i></div>
+            <div style="line-height:1.3; overflow:hidden;">
+              <div style="font-size:0.65rem; color:var(--text-dim); margin-bottom:2px;">رُفعت بواسطة</div>
+              <div style="font-size:0.8rem; font-weight:700; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${g.submittedBy}</div>
+            </div>
+          </div>` : `
+          <div style="display:flex; align-items:center; gap:10px; padding:6px 10px; background:rgba(16,185,129,0.05); border:1px solid rgba(16,185,129,0.1); border-radius:14px; width:100%;">
+            <div class="verified-badge verified-green" style="font-size:1.1rem; flex-shrink:0;"><i class="fas fa-check"></i></div>
+            <div style="line-height:1.3; overflow:hidden;">
+              <div style="font-size:0.65rem; color:var(--text-dim); margin-bottom:2px;">الناشر</div>
+              <div style="font-size:0.8rem; font-weight:700; color:#10b981; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">رسمي</div>
+            </div>
+          </div>`}
+        </div>
+      </div>
+      <div class="game-footer" style="justify-content: space-between; padding-top:12px; border-top: 1px solid rgba(255, 255, 255, 0.05); background: transparent;">
+        <div class="download-count" id="game-download-count-${g.id}" data-base="${dlCount}"><i class="fas fa-arrow-down" style="margin-left:4px; color:var(--primary-light)"></i>${Number(dlCount).toLocaleString('en-US')}</div>
+        <div style="font-size:0.75rem; color:var(--text-dim); display:flex; align-items:center; gap:4px; font-weight:600;"><i class="fas fa-hdd"></i>${g.size}</div>
+      </div>
+    </div>`;
+    }
+
+    // Init
+    window.addEventListener('firebaseDataReady', () => {
+      if (typeof injectNavAuth === 'function') injectNavAuth();
+      allGames = loadAllGames();
+      buildFilterButtons(allGames);
+      buildPlatformFilterButtons(allGames);
+
+      // Handle URL parameters (Search/Category/Platform)
+      const params = new URLSearchParams(window.location.search);
+      const searchQ = params.get('search');
+      const catQ = params.get('cat');
+      const platQ = params.get('platform');
+
+      if (searchQ) {
+        const libSearchInput = document.getElementById('lib-search');
+        if (libSearchInput) libSearchInput.value = searchQ;
+      }
+      if (catQ) {
+        currentCat = catQ;
+      }
+      if (platQ) {
+        currentPlat = platQ;
+      }
+
+      renderLibrary(allGames);
+      if (searchQ || catQ || platQ) applyLibFilter();
+
+      // Particle canvas
+      const c = document.getElementById('bg-canvas');
+      if (c) {
+        const ctx = c.getContext('2d');
+        let W, H;
+        function rs() { W = c.width = innerWidth; H = c.height = innerHeight; }
+        rs(); window.addEventListener('resize', rs);
+        let ps = [];
+        for (let i = 0; i < 25; i++) ps.push({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.5 + 0.3, vy: (Math.random() - .5) * .4 });
+        function d() { ctx.clearRect(0, 0, W, H); ps.forEach(p => { p.y += p.vy; if (p.y < 0) p.y = H; if (p.y > H) p.y = 0; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fillStyle = 'rgba(168,85,247,0.25)'; ctx.fill(); }); requestAnimationFrame(d); }
+        d();
+      }
+    });
+  </script>
+
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/firebase-sync.js"></script>
+</body>
+
+</html>
