@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>الأسئلة الشائعة - RobaNos</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="js/theme.js"></script>
+  <style>
+    .faq-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .faq-header {
+      text-align: center;
+      margin-bottom: 50px;
+      animation: fadeInUp .5s ease both;
+    }
+
+    .faq-header h1 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .faq-header p {
+      color: var(--text-dim);
+      font-size: 1.1rem;
+    }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .faq-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 25px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      animation: fadeInUp .5s ease both;
+    }
+
+    .faq-item:hover {
+      border-color: var(--primary-light);
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateY(-3px);
+    }
+
+    .faq-question {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    .faq-question i {
+      color: var(--primary-light);
+      font-size: 1.4rem;
+    }
+
+    .faq-answer {
+      color: var(--text-dim);
+      line-height: 1.7;
+      font-size: 1rem;
+      padding-right: 40px;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .light-mode .faq-item {
+      background: #fff;
+      border-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .light-mode .faq-question {
+      color: #1e293b;
+    }
+
+    .light-mode .faq-answer {
+      color: #475569;
+    }
+  </style>
+</head>
+
+<body class="profile-body">
+
+  <div class="bg-particles"></div>
+  <canvas id="bg-canvas"></canvas>
+
+  <div class="main-layout">
+    <!-- Sidebar (Same as index) -->
+    <aside class="g-sidebar">
+      <a href="index.html" class="g-logo">
+        <i class="fas fa-cubes site-brand-icon"></i>
+        <span class="g-logo-text site-brand-name">RobaNos</span>
+      </a>
+      <ul class="g-nav">
+        <li><a href="index.html" class="g-nav-link"><i class="fas fa-home"></i> الرئيسية</a></li>
+        <li><a href="videos.html" class="g-nav-link"><i class="fas fa-play-circle"></i> الفيديوهات</a></li>
+        <li><a href="library.html" class="g-nav-link"><i class="fas fa-gamepad"></i> المكتبة</a></li>
+        <li><a href="upcoming.html" class="g-nav-link"><i class="fas fa-calendar-alt"></i> قادمة قريباً</a></li>
+        <li style="margin: 10px 0; border-bottom: 1px solid var(--border); opacity: 0.5;"></li>
+        <li><a href="profile.html" class="g-nav-link" id="nav-user-link" style="display:none; position:relative;"><i
+              class="fas fa-user-circle"></i> ملفي الشخصي <span class="nav-notif-badge"
+              style="position:absolute; top:50%; left:20px; transform:translateY(-50%); background:#ef4444; color:white; width:18px; height:18px; border-radius:50%; font-size:0.7rem; display:none; align-items:center; justify-content:center; font-weight:700; border:2px solid var(--bg-card);">0</span></a>
+        </li>
+        <li><a href="auth.html" class="g-nav-link" id="nav-auth-btn" style="display:none"><i
+              class="fas fa-sign-in-alt"></i> تسجيل الدخول</a></li>
+        <li><a href="#" class="g-nav-link" id="nav-logout-btn" onclick="logout(); return false;"
+            style="display:none; color:#f87171"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a></li>
+        <li style="margin: 10px 0; border-bottom: 1px solid var(--border); opacity: 0.5;"></li>
+        <li><a href="submit-game.html" class="g-nav-link" id="nav-submit-btn" style="display:none"><i
+              class="fas fa-upload"></i> أرسل لعبتك</a></li>
+        <li><a href="dashboard.html" class="g-nav-link" id="nav-dash-btn" style="display:none"><i
+              class="fas fa-sliders-h"></i> لوحة التحكم</a></li>
+      </ul>
+      <div class="g-theme-trigger" id="theme-toggle">
+        <i class="fas fa-moon"></i>
+        <span>تبديل الوضع</span>
+      </div>
+    </aside>
+
+    <div class="content-wrapper">
+      <div class="faq-container">
+        <header class="faq-header">
+          <h1>الأسئلة الشائعة</h1>
+          <p>كل ما تريد معرفته عن منصة <span class="site-brand-name">RobaNos</span> في مكان واحد</p>
+        </header>
+
+        <div class="faq-list">
+          <div class="faq-item" style="animation-delay: 0.1s">
+            <div class="faq-question">
+              <i class="fas fa-download"></i>
+              <span>كيف يمكنني تحميل الألعاب من الموقع؟</span>
+            </div>
+            <div class="faq-answer">
+              العملية بسيطة جداً! ابحث عن اللعبة التي تريدها، واضغط على زر "تحميل الآن" في صفحة اللعبة. سيتم توجيهك
+              مباشرة لروابط التحميل المتاحة (Mediafire, Google Drive, إلخ).
+            </div>
+          </div>
+
+          <div class="faq-item" style="animation-delay: 0.2s">
+            <div class="faq-question">
+              <i class="fas fa-shield-virus"></i>
+              <span>هل الألعاب الموجودة في الموقع آمنة؟</span>
+            </div>
+            <div class="faq-answer">
+              نعم، نحن في <span class="site-brand-name">RobaNos</span> نحرص بشدة على فحص كافة الملفات المنشورة باستخدام
+              أحدث مضادات الفيروسات لضمان تجربة آمنة وخالية من البرمجيات الخبيثة لمستخدمينا.
+            </div>
+          </div>
+
+          <div class="faq-item" style="animation-delay: 0.3s">
+            <div class="faq-question">
+              <i class="fas fa-upload"></i>
+              <span>كيف يمكنني إرسال لعبتي الخاصة للموقع؟</span>
+            </div>
+            <div class="faq-answer">
+              إذا كنت مطوراً، يمكنك إنشاء حساب والانتقال إلى صفحة "أرسل لعبتك". قم بملء البيانات المطلوبة ورفع صور
+              اللعبة، وسيقوم فريقنا بمراجعتها ونشرها في حال مطابقتها للمعايير.
+            </div>
+          </div>
+
+          <div class="faq-item" style="animation-delay: 0.4s">
+            <div class="faq-question">
+              <i class="fas fa-coins"></i>
+              <span>هل يتطلب الموقع أي رسوم اشتراك؟</span>
+            </div>
+            <div class="faq-answer">
+              منصة <span class="site-brand-name">RobaNos</span> مجانية بالكامل لجميع المستخدمين. لا نطلب أي اشتراكات
+              شهرية، وهدفنا هو توفير مكتبة ألعاب ضخمة وسهلة الوصول للجميع.
+            </div>
+          </div>
+
+          <div class="faq-item" style="animation-delay: 0.5s">
+            <div class="faq-question">
+              <i class="fas fa-headset"></i>
+              <span>كيف يمكنني التواصل مع إدارة الموقع؟</span>
+            </div>
+            <div class="faq-answer">
+              يمكنك التواصل معنا عبر قنواتنا الرسمية على ديسكورد أو يوتيوب، أو من خلال صفحة "تواصل معنا" (قريباً). نحن
+              نسعد دائماً بسماع آرائكم واقتراحاتكم.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <div class="footer-bottom">
+          <p>© 2026 <span class="site-brand-name">RobaNos</span> · صُنع بكل <i class="fas fa-heart"
+              style="color:#ef4444"></i> لمحبي الألعاب</p>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Mobile Search Overlay -->
+  <div class="mobile-search-overlay" id="mobile-search-overlay" onclick="closeMobileSearch(event)">
+    <div class="mobile-search-box">
+      <div class="mobile-search-inner" onclick="event.stopPropagation()">
+        <i class="fas fa-search" style="color:var(--text-muted)"></i>
+        <input type="text" id="mobile-search-input" placeholder="ابحث عن لعبة..."
+          onkeydown="if(event.key==='Enter') { if(typeof globalSearch === 'function') globalSearch(this.value); else window.location.href='library.html?search='+encodeURIComponent(this.value); closeMobileSearch(); }">
+        <i class="fas fa-times" style="color:var(--text-dim); padding:10px; margin:-10px; cursor:pointer;"
+          onclick="closeMobileSearch({target: this})"></i>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav" id="bottom-nav">
+    <a href="index.html" class="bottom-nav-item">
+      <div class="bottom-nav-icon"><i class="fas fa-home"></i></div>
+      <span>الرئيسية</span>
+    </a>
+    <a href="library.html" class="bottom-nav-item">
+      <div class="bottom-nav-icon"><i class="fas fa-gamepad"></i></div>
+      <span>المكتبة</span>
+    </a>
+    <div class="bottom-nav-item bottom-nav-center" onclick="openMobileSearch()">
+      <div class="bottom-nav-icon-main"><i class="fas fa-search"></i></div>
+      <span>بحث</span>
+    </div>
+    <a href="videos.html" class="bottom-nav-item">
+      <div class="bottom-nav-icon"><i class="fas fa-play-circle"></i></div>
+      <span>المقاطع</span>
+    </a>
+    <a href="auth.html" class="bottom-nav-item" id="bn-login" style="display:none">
+      <div class="bottom-nav-icon"><i class="fas fa-sign-in-alt"></i></div>
+      <span>دخول</span>
+    </a>
+    <a href="profile.html" class="bottom-nav-item" id="bn-profile" style="display:none; position:relative">
+      <div class="bottom-nav-icon"><i class="fas fa-user-circle"></i></div>
+      <span class="nav-notif-badge"
+        style="position:absolute; top:-5px; left:50%; transform:translateX(10px); background:#ef4444; color:white; width:16px; height:16px; border-radius:50%; font-size:0.6rem; display:none; align-items:center; justify-content:center; font-weight:700; border:2px solid var(--bg);">0</span>
+      <span>حسابي</span>
+    </a>
+  </nav>
+
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/firebase-sync.js"></script>
+  <script src="js/app.js"></script>
+</body>
+
+</html>
