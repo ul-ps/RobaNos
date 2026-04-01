@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+    <title>مشاهدة الفيديو - RobaNos</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="js/theme.js?v=1.1"></script>
+    <style>
+        /* --- Container Layout --- */
+        .watch-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px 100px;
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 30px;
+        }
+
+        /* --- Video Section --- */
+        .video-main { min-width: 0; }
+        .video-player-box {
+            width: 100%; aspect-ratio: 16 / 9;
+            background: #000; border-radius: 20px;
+            overflow: hidden; border: 1px solid var(--border);
+            box-shadow: var(--shadow-card); margin-bottom: 25px;
+            position: relative;
+        }
+        .video-player-box iframe, .video-player-box video { width: 100%; height: 100%; border: none; }
+
+        .video-header { margin-bottom: 20px; }
+        .video-title {
+            font-size: 1.8rem; font-weight: 800; color: var(--text);
+            margin-bottom: 15px; line-height: 1.4;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        /* --- Action Bar & Stats --- */
+        .video-actions-bar {
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 20px; padding: 16px 0; border-bottom: 1px solid var(--border);
+        }
+
+        .author-stats-group { display: flex; align-items: center; gap: 20px; }
+
+        .author-info { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+        .author-avatar {
+            width: 48px; height: 48px; border-radius: 50%;
+            background: var(--gradient-primary); display: flex; align-items: center;
+            justify-content: center; font-size: 1.2rem; font-weight: 800;
+            color: #fff; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.25);
+            flex-shrink: 0;
+        }
+        .author-details h4 { font-size: 1.05rem; color: var(--text); margin: 0; line-height: 1.2; }
+        .author-details span { font-size: 0.8rem; color: var(--text-dim); }
+
+        .video-stats {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 0.88rem; color: var(--text-dim); font-weight: 700;
+            background: rgba(var(--text-rgb, 255,255,255), 0.04);
+            padding: 8px 16px; border-radius: 12px; border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+        :root.light-mode .video-stats { background: rgba(0,0,0,0.03); }
+        .video-stats i { color: var(--primary-light); font-size: 0.9rem; margin-left: 2px; }
+        .stat-sep { opacity: 0.2; margin: 0 4px; font-weight: 400; }
+
+        .action-buttons { display: flex; align-items: center; gap: 10px; }
+        .action-group {
+            display: flex; align-items: center; background: rgba(var(--text-rgb, 255,255,255), 0.05);
+            border: 1px solid var(--border); border-radius: 20px; flex-shrink: 0;
+        }
+        .action-btn {
+            white-space: nowrap; display: flex; align-items: center; gap: 10px;
+            padding: 10px 18px; background: rgba(var(--text-rgb, 255,255,255), 0.05);
+            border: 1px solid var(--border); border-radius: 20px;
+            color: var(--text); font-weight: 700; font-size: 0.95rem;
+            cursor: pointer; transition: var(--transition);
+        }
+        .action-group .action-btn { background: transparent !important; border: none !important; }
+        .action-btn:hover { background: rgba(var(--text-rgb, 255,255,255), 0.1); color: var(--primary-light); }
+        .action-btn.liked { color: var(--primary-light); }
+        .action-btn.disliked { color: var(--red); }
+
+        /* --- Description & Cards --- */
+        .video-info-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 20px; padding: 25px; margin-top: 25px;
+        }
+        .video-description {
+            color: var(--text-muted); line-height: 1.7; font-size: 1.05rem;
+            white-space: pre-wrap; margin-top: 5px;
+        }
+
+        /* --- Suggestions Sidebar --- */
+        .video-sidebar { display: flex; flex-direction: column; gap: 20px; }
+        .sidebar-title {
+            font-size: 1.2rem; font-weight: 700; color: var(--text);
+            margin-bottom: 15px; display: flex; align-items: center; gap: 10px;
+        }
+        .suggested-card {
+            display: flex; gap: 15px; cursor: pointer; transition: var(--transition);
+            padding: 8px; border-radius: 12px;
+        }
+        .suggested-card:hover { background: rgba(var(--text-rgb, 255,255,255), 0.05); transform: translateX(-5px); }
+        :root.light-mode .suggested-card:hover { background: rgba(0,0,0,0.04); }
+        .suggested-thumb {
+            width: 140px; aspect-ratio: 16/9; background-size: cover;
+            background-position: center; border-radius: 10px; flex-shrink: 0;
+            position: relative;
+        }
+        .suggested-info { flex: 1; min-width: 0; }
+        .suggested-title {
+            font-size: 0.95rem; font-weight: 700; color: var(--text);
+            margin-bottom: 5px; display: -webkit-box; -webkit-line-clamp: 2;
+            line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+            line-height: 1.4;
+        }
+        .suggested-meta { font-size: 0.8rem; color: var(--text-dim); }
+
+        .comments-section { margin-top: 40px; }
+
+        /* --- Mobile Visibility Helpers --- */
+        .mobile-only { display: none; }
+        @media (max-width: 1100px) {
+            .mobile-only { display: flex !important; }
+            .desktop-only { display: none !important; }
+
+            .watch-container { grid-template-columns: 1fr; padding-top: 15px; }
+            .video-title { font-size: 1.4rem; }
+            .video-sidebar { margin-top: 10px; }
+
+            .video-actions-bar { flex-direction: column; align-items: stretch; gap: 15px; }
+            .author-stats-group { justify-content: space-between; width: 100%; }
+            .action-buttons {
+                width: calc(100% + 40px); margin: 0 -20px;
+                padding: 10px 20px; overflow-x: auto; scrollbar-width: none;
+            }
+            .action-buttons::-webkit-scrollbar { display: none; }
+
+            .comments-section { margin-top: 20px; }
+
+            /* Unified mobile interaction rows */
+            .mobile-stats-row {
+                display: flex !important;
+                background: rgba(var(--text-rgb, 255,255,255), 0.03);
+                border: 1px solid var(--border);
+                padding: 12px 16px; border-radius: 14px;
+                margin-top: 10px; cursor: pointer;
+                justify-content: space-between; align-items: center;
+                transition: 0.2s;
+            }
+            .mobile-stats-row:active { transform: scale(0.98); }
+            :root.light-mode .mobile-stats-row { background: rgba(0,0,0,0.03); }
+        }
+
+        /* --- Comments System (Clean & Premium) --- */
+        .comments-list { display: flex; flex-direction: column; gap: 32px; margin-top: 30px; }
+        .comment-item-wrapper { 
+            background: none; border: none; padding: 0;
+            border-bottom: 1px solid rgba(var(--text-rgb, 255,255,255), 0.05);
+            padding-bottom: 24px;
+            display: flex; flex-direction: column; gap: 4px;
+        }
+        .comment-item-wrapper:last-child { border-bottom: none; }
+        
+        .comment-main-row { display: flex; gap: 16px; }
+        
+        .comment-avatar {
+            width: 44px; height: 44px; border-radius: 50%;
+            background: var(--gradient-primary); 
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-weight: 800; font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        
+        .comment-content { flex: 1; min-width: 0; }
+        
+        .comment-header {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            margin-bottom: 6px;
+        }
+        
+        .comment-user-info { display: flex; align-items: center; gap: 8px; }
+        .comment-user { color: var(--text); font-weight: 800; font-size: 0.95rem; text-decoration: none; }
+        .comment-user:hover { color: var(--primary-light); }
+        .comment-date { color: var(--text-dim); font-size: 0.78rem; font-weight: 500; }
+
+        .comment-text {
+            color: var(--text); font-size: 0.98rem; line-height: 1.5;
+            white-space: pre-wrap; margin-bottom: 8px;
+        }
+
+        .comment-actions { display: flex; align-items: center; gap: 12px; }
+
+        .comment-delete-btn {
+            background: none; border: none; color: var(--text-dim); 
+            font-size: 0.78rem; font-weight: 700; cursor: pointer;
+            padding: 4px 8px; border-radius: 6px; transition: 0.2s;
+            display: flex; align-items: center; gap: 5px; opacity: 0.5;
+        }
+        .comment-item-wrapper:hover .comment-delete-btn { opacity: 0.8; }
+        .comment-delete-btn:hover { color: var(--red); background: rgba(239, 68, 68, 0.1); opacity: 1 !important; }
+
+        .reply-trigger-btn {
+            background: none; border: none; color: var(--text-dim);
+            font-size: 0.82rem; font-weight: 700; cursor: pointer;
+            padding: 6px 12px; border-radius: 18px; transition: 0.2s;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .reply-trigger-btn:hover { background: rgba(var(--text-rgb, 255,255,255), 0.08); color: var(--text); }
+
+        /* --- Nested Replies --- */
+        .replies-section {
+            margin-right: 44px; margin-top: 15px;
+            display: flex; flex-direction: column; gap: 16px;
+            border-right: 2px solid var(--border);
+            padding-right: 20px;
+        }
+        
+        .reply-item { display: flex; gap: 12px; transition: 0.3s; padding: 4px 0; }
+        .reply-item:hover { transform: translateX(5px); }
+        
+        .reply-avatar-sm {
+            width: 32px; height: 32px; border-radius: 50%;
+            background: var(--gradient-primary); font-size: 0.8rem;
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-weight: 800; flex-shrink: 0;
+        }
+        
+        .reply-body { flex: 1; min-width: 0; }
+        .reply-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
+        .reply-user { font-size: 0.9rem; font-weight: 800; color: var(--text); }
+        .reply-text { font-size: 0.92rem; color: var(--text); line-height: 1.5; }
+
+        /* --- Reply Form --- */
+        .reply-form-container {
+            margin-top: 15px; display: none;
+            background: rgba(var(--text-rgb, 255,255,255), 0.02);
+            border-radius: 12px; padding: 15px; border: 1px solid var(--border);
+            animation: fadeIn 0.3s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .reply-form-container.active { display: block; border-right: 3px solid var(--primary); }
+        
+        .reply-textarea {
+            width: 100%; min-height: 60px; background: rgba(var(--text-rgb, 255,255,255), 0.03);
+            border: 1px solid var(--border); border-radius: 10px;
+            padding: 12px; color: var(--text); font-family: inherit; font-size: 0.92rem;
+            resize: none; outline: none; margin-bottom: 10px; transition: 0.3s;
+        }
+        .reply-textarea:focus { border-color: var(--primary-light); background: rgba(var(--text-rgb, 255,255,255), 0.05); }
+
+        .reply-btns { display: flex; justify-content: flex-end; gap: 8px; }
+        .btn-cancel { background: none; border: none; color: var(--text-dim); font-weight: 700; cursor: pointer; padding: 6px 12px; font-size: 0.85rem; border-radius: 18px; }
+        .btn-cancel:hover { background: rgba(255,255,255,0.05); }
+        .btn-reply-submit { 
+            background: var(--primary); color: #fff; border: none; 
+            padding: 6px 16px; border-radius: 18px; font-weight: 700; cursor: pointer;
+            transition: 0.3s; font-size: 0.85rem;
+        }
+        .btn-reply-submit:hover { background: var(--primary-light); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 1100px) {
+            .replies-section { margin-right: 20px; padding-right: 12px; }
+            .comment-item-wrapper { padding: 15px; }
+        }
+
+        /* --- Bottom Sheet (Mobile Modals) --- */
+        .sheet-overlay { 
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+            z-index: 2000; opacity: 0; pointer-events: none; transition: 0.3s;
+        }
+        .sheet-overlay.active { opacity: 1; pointer-events: auto; }
+
+        .bottom-sheet {
+            position: fixed; left: 0; right: 0; bottom: -100%;
+            background: var(--bg-card); border-radius: 24px 24px 0 0;
+            border-top: 1px solid var(--border); z-index: 2001; 
+            max-height: 90vh; transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+        .bottom-sheet.active { bottom: 0; }
+
+        .sheet-header { 
+            padding: 20px; display: flex; justify-content: space-between; 
+            align-items: center; border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+        .sheet-title { font-size: 1.2rem; font-weight: 800; color: var(--text); }
+        .close-sheet { background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; }
+
+        .sheet-body { 
+            flex: 1; overflow-y: auto; padding: 20px;
+            line-height: 1.7; color: var(--text-muted); font-size: 1rem;
+            scrollbar-width: none;
+        }
+        .sheet-body::-webkit-scrollbar { display: none; }
+
+        .sheet-footer {
+            padding: 12px 16px; border-top: 1px solid var(--border); 
+            background: var(--bg-card); display: flex; align-items: center; gap: 12px;
+            padding-bottom: calc(15px + env(safe-area-inset-bottom));
+            flex-shrink: 0;
+        }
+        .sheet-footer-avatar {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: var(--gradient-primary); display: flex; align-items: center;
+            justify-content: center; color: white; font-weight: bold; flex-shrink: 0;
+        }
+        .sheet-input {
+            flex: 1; background: rgba(var(--text-rgb, 255,255,255), 0.05);
+            border: 1px solid var(--border); border-radius: 20px;
+            padding: 10px 16px; color: var(--text); font-family: inherit;
+            outline: none; font-size: 0.95rem;
+        }
+        .sheet-send-btn { background: none; border: none; color: var(--primary-light); font-size: 1.3rem; cursor: pointer; padding: 5px; }
+        .sheet-send-btn:disabled { opacity: 0.3; }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-particles"></div>
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="main-layout">
+        <!-- Sidebar (Shared with other pages) -->
+        <aside class="g-sidebar">
+            <a href="index.html" class="g-logo">
+                <i class="fas fa-cubes site-brand-icon"></i>
+                <span class="g-logo-text site-brand-name">RobaNos</span>
+            </a>
+
+            <div class="nav-search" style="margin-bottom: 30px; width: 100%;">
+                <input type="text" id="main-search" placeholder="ابحث عن لعبة..." onkeydown="if(event.key==='Enter') globalSearch(this.value)" style="width:100%"/>
+                <i class="fas fa-search nav-search-icon" style="left: 15px; right: auto; cursor:pointer;" onclick="globalSearch(document.getElementById('main-search').value)"></i>
+            </div>
+
+            <ul class="g-nav">
+                <li><a href="index.html" class="g-nav-link"><i class="fas fa-home"></i> الرئيسية</a></li>
+                <li><a href="videos.html" class="g-nav-link active"><i class="fas fa-play-circle"></i> الفيديوهات</a></li>
+                <li><a href="library.html" class="g-nav-link"><i class="fas fa-gamepad"></i> المكتبة</a></li>
+                <li><a href="upcoming.html" class="g-nav-link"><i class="fas fa-calendar-alt"></i> قادمة قريباً</a></li>
+                <li style="margin: 10px 0; border-bottom: 1px solid var(--border); opacity: 0.5;"></li>
+                <li><a href="profile.html" class="g-nav-link" id="nav-user-link" style="display:none"><i class="fas fa-user-circle"></i> ملفي الشخصي</a></li>
+                <li><a href="auth.html" class="g-nav-link" id="nav-auth-btn" style="display:none"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</a></li>
+                <li><a href="dashboard.html" class="g-nav-link" id="nav-dash-btn" style="display:none"><i class="fas fa-sliders-h"></i> لوحة التحكم</a></li>
+            </ul>
+
+            <div class="g-theme-trigger" id="theme-toggle">
+                <i class="fas fa-moon"></i>
+                <span>تبديل الوضع</span>
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <div class="content-wrapper">
+            <div class="watch-container">
+                
+                <!-- Main Video Column -->
+                <div class="video-main">
+                    <div class="video-player-box" id="video-container">
+                        <!-- Video iframe injected here by watch.js -->
+                        <div style="display:flex; align-items:center; justify-content:center; height:100%; color:var(--text-muted);">
+                            <i class="fas fa-circle-notch fa-spin fa-2x"></i>
+                        </div>
+                    </div>
+
+                    <div class="video-header">
+                        <h1 class="video-title" id="video-title">جاري تحميل الفيديو...</h1>
+                        
+                        <div class="video-actions-bar">
+                            <div class="author-stats-group">
+                                <div class="author-info" onclick="document.getElementById('btn-view-game').click()">
+                                    <div class="author-avatar" id="author-avatar-char">G</div>
+                                    <div class="author-details">
+                                        <h4 id="game-author">GameVault</h4>
+                                        <span id="game-cat">تصنيف اللعبة</span>
+                                    </div>
+                                </div>
+
+                                <div class="video-stats">
+                                    <span style="white-space:nowrap;"><i class="fas fa-eye"></i> <span id="view-count">0</span> مشاهدة</span>
+                                    <span class="stat-sep">•</span>
+                                    <span id="video-date-added" style="white-space:nowrap;">...</span>
+                                </div>
+                            </div>
+
+                            <div class="action-buttons" style="overflow-x: auto; scrollbar-width:none;">
+                                <style> .action-buttons::-webkit-scrollbar { display:none; } </style>
+                                <div class="action-group">
+                                    <button class="action-btn" id="btn-like" onclick="toggleLike()">
+                                        <i class="far fa-thumbs-up" id="like-icon"></i> 
+                                        <span id="like-count">0</span>
+                                    </button>
+                                    <div style="width:1px; height:20px; background:var(--border); opacity:0.5;"></div>
+                                    <button class="action-btn" id="btn-dislike" onclick="toggleDislike()">
+                                        <i class="far fa-thumbs-down" id="dislike-icon"></i>
+                                    </button>
+                                </div>
+
+                                <button class="action-btn" id="btn-share" onclick="if(typeof openShareModal === 'function') openShareModal()">
+                                    <i class="fas fa-share"></i> مشاركة
+                                </button>
+                                
+                                <button class="action-btn" id="btn-report" onclick="if(typeof openReportModal === 'function') openReportModal(window.currentGameId, 'video')">
+                                    <i class="fas fa-flag"></i> إبلاغ
+                                </button>
+
+                                <button class="action-btn" id="btn-view-game" style="background:var(--primary); color:#fff; border:none; margin-right:10px;">
+                                    <i class="fas fa-external-link-alt"></i> صفحة اللعبة
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Mobile View/Desc Trigger -->
+                        <div class="mobile-only mobile-stats-row" onclick="openBottomSheet('desc')">
+                            <div style="flex:1;">
+                                <div style="font-weight:700; color:var(--text); margin-bottom:4px;">الوصف</div>
+                                <div style="font-size:0.85rem; color:var(--text-muted);" id="mobile-desc-preview">...</div>
+                            </div>
+                            <i class="fas fa-chevron-left" style="font-size:0.8rem; opacity:0.5;"></i>
+                        </div>
+
+                        <!-- Info Card -->
+                        <div class="video-info-card desktop-only">
+                            <p class="video-description" id="video-desc">جاري تحميل الوصف...</p>
+                        </div>
+                    </div>
+
+                    <!-- Comments Section -->
+                    <div class="comments-section" id="comments-section">
+                        <div class="desktop-only" style="display:flex; align-items:center; gap:12px; margin-bottom:25px;">
+                            <h3 style="font-family:'Rajdhani'; font-size:1.4rem; font-weight:700;"><span id="comments-count">0</span> تعليق</h3>
+                        </div>
+
+                        <!-- Mobile Comments Preview -->
+                        <div class="mobile-only mobile-stats-row" onclick="openBottomSheet('comments')">
+                            <div style="flex:1;">
+                                <div style="font-weight:700; color:var(--text); margin-bottom:4px;">التعليقات (<span id="mobile-comments-count">0</span>)</div>
+                                <div style="font-size:0.85rem; color:var(--text-muted);" id="mobile-comments-preview">كن أول من يعلق على هذا الفيديو...</div>
+                            </div>
+                            <i class="fas fa-chevron-left" style="font-size:0.8rem; opacity:0.5;"></i>
+                        </div>
+
+                        <div id="comment-input-area" class="desktop-only">
+                            <!-- Injected by watch.js -->
+                        </div>
+
+                        <div id="comments-list" class="desktop-only">
+                            <!-- Injected by watch.js -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Suggestions Sidebar -->
+                <div class="video-sidebar">
+                    <h3 class="sidebar-title">
+                        <i class="fas fa-stream"></i> فيديوهات مقترحة
+                    </h3>
+                    <div id="suggestions-list" style="display:flex; flex-direction:column; gap:15px;">
+                        <!-- Injected by watch.js -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Bottom Sheets -->
+    <div class="sheet-overlay" id="sheet-overlay" onclick="closeBottomSheet()"></div>
+    <div class="bottom-sheet" id="bottom-sheet">
+        <div class="sheet-header">
+            <h3 class="sheet-title" id="sheet-title">الوصف</h3>
+            <button class="close-sheet" onclick="closeBottomSheet()">&times;</button>
+        </div>
+        <div class="sheet-body" id="sheet-body">
+            <!-- Dynamic content -->
+        </div>
+        <div class="sheet-footer" id="sheet-footer" style="display: none;">
+            <div class="sheet-footer-avatar" id="sheet-footer-avatar">?</div>
+            <input type="text" class="sheet-input" id="sheet-comment-input" placeholder="إضافة تعليق علني..." 
+                   onkeydown="if(event.key==='Enter') submitVideoComment(window.currentGameId, true)">
+            <button class="sheet-send-btn" id="sheet-send-btn" onclick="submitVideoComment(window.currentGameId, true)">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Firebase & Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/firebase-sync.js"></script>
+    <script src="js/watch.js"></script>
+    <script>
+        // Adjust UI for report modal or other features
+        window.addEventListener('DOMContentLoaded', () => {
+            if(typeof injectNavAuth === 'function') injectNavAuth();
+        });
+    </script>
+
+    <!-- Bottom Nav (Mobile) -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="bottom-nav-item">
+            <div class="bottom-nav-icon"><i class="fas fa-home"></i></div>
+            <span>الرئيسية</span>
+        </a>
+        <a href="library.html" class="bottom-nav-item">
+            <div class="bottom-nav-icon"><i class="fas fa-gamepad"></i></div>
+            <span>المكتبة</span>
+        </a>
+        <div class="bottom-nav-item bottom-nav-center" onclick="openMobileSearch()">
+            <div class="bottom-nav-icon-main"><i class="fas fa-search"></i></div>
+            <span>بحث</span>
+        </div>
+        <a href="videos.html" class="bottom-nav-item active">
+            <div class="bottom-nav-icon"><i class="fas fa-play-circle"></i></div>
+            <span>المقاطع</span>
+        </a>
+        <a href="profile.html" class="bottom-nav-item">
+            <div class="bottom-nav-icon"><i class="fas fa-user-circle"></i></div>
+            <span>تعليقاتي</span>
+        </a>
+    </nav>
+</body>
+</html>

@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <title>اتصل بنا - RobaNos</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="js/theme.js"></script>
+  <style>
+    .contact-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 60px 20px;
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 40px;
+    }
+
+    .contact-info-card {
+      background: var(--gradient-primary);
+      border-radius: 30px;
+      padding: 40px;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 20px 40px rgba(124, 58, 237, 0.3);
+      animation: fadeInLeft .6s ease both;
+    }
+
+    .contact-form-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 40px;
+      backdrop-filter: blur(20px);
+      animation: fadeInRight .6s ease both;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .info-item i {
+      font-size: 1.5rem;
+      width: 50px;
+      height: 50px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .social-stack {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .social-circle {
+      width: 45px;
+      height: 45px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      transition: all 0.3s ease;
+      font-size: 1.2rem;
+    }
+
+    .social-circle:hover {
+      background: #fff;
+      color: var(--primary);
+      transform: translateY(-5px);
+    }
+
+    @keyframes fadeInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes fadeInRight {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .contact-container {
+        grid-template-columns: 1fr;
+      }
+
+      .contact-info-card {
+        order: 2;
+        height: auto;
+      }
+    }
+
+    .light-mode .contact-form-card {
+      background: #fff;
+      border-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .light-mode .contact-form-card h2 {
+      color: #1e293b;
+    }
+
+    /* Premium Form Styling */
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--primary-light);
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+      padding-right: 5px;
+    }
+
+    .form-input {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      color: #fff;
+      padding: 15px 20px;
+      width: 100%;
+      font-size: 1rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1), inset 0 2px 4px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .form-input::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+      font-size: 0.9rem;
+    }
+
+    .light-mode .form-label {
+      color: var(--primary);
+    }
+
+    .light-mode .form-input {
+      background: #f8fafc;
+      border-color: #e2e8f0;
+      color: #1e293b;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+    }
+
+    .light-mode .form-input:focus {
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1), inset 0 2px 4px rgba(0, 0, 0, 0.02);
+    }
+
+    .light-mode .form-input::placeholder {
+      color: #94a3b8;
+    }
+
+    /* Iconic Inputs */
+    .form-group-icon {
+      position: relative;
+    }
+
+    .form-group-icon i {
+      position: absolute;
+      top: 50%;
+      right: 18px;
+      transform: translateY(-50%);
+      color: var(--text-dim);
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+
+    .form-group-icon .form-input {
+      padding-right: 50px !important;
+    }
+
+    .form-group-icon .form-input:focus+i {
+      color: var(--primary-light);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .map-placeholder {
+      width: 100%;
+      height: 150px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px dashed rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 0.9rem;
+      gap: 10px;
+    }
+
+    .contact-success-box {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+      animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    }
+
+    .success-icon-circle {
+      width: 80px;
+      height: 80px;
+      background: #10b981;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 2.5rem;
+      margin: 0 auto 20px;
+      box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+    }
+
+    /* Autofill Card Styles */
+    .auth-autofill-card {
+      background: rgba(124, 58, 237, 0.1);
+      border: 1px solid rgba(124, 58, 237, 0.2);
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 30px;
+      display: none;
+      /* Shown via JS */
+      align-items: center;
+      gap: 15px;
+      animation: fadeInUp 0.5s ease both;
+    }
+
+    .autofill-avatar {
+      width: 50px;
+      height: 50px;
+      background: var(--gradient-primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .autofill-info {
+      flex: 1;
+    }
+
+    .autofill-btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .autofill-btn:hover {
+      background: var(--primary-light);
+      transform: scale(1.05);
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  </style>
+</head>
+
+<body class="profile-body">
+
+  <div class="bg-particles"></div>
+  <canvas id="bg-canvas"></canvas>
+
+  <div class="main-layout">
+    <aside class="g-sidebar">
+      <a href="index.html" class="g-logo">
+        <i class="fas fa-cubes site-brand-icon"></i>
+        <span class="g-logo-text site-brand-name">RobaNos</span>
+      </a>
+      <ul class="g-nav">
+        <li><a href="index.html" class="g-nav-link"><i class="fas fa-home"></i> الرئيسية</a></li>
+        <li><a href="videos.html" class="g-nav-link"><i class="fas fa-play-circle"></i> الفيديوهات</a></li>
+        <li><a href="library.html" class="g-nav-link"><i class="fas fa-gamepad"></i> المكتبة</a></li>
+        <li><a href="upcoming.html" class="g-nav-link"><i class="fas fa-calendar-alt"></i> قادمة قريباً</a></li>
+        <li style="margin: 10px 0; border-bottom: 1px solid var(--border); opacity: 0.5;"></li>
+        <li><a href="profile.html" class="g-nav-link" id="nav-user-link" style="display:none; position:relative;"><i
+              class="fas fa-user-circle"></i> ملفي الشخصي <span class="nav-notif-badge"
+              style="position:absolute; top:50%; left:20px; transform:translateY(-50%); background:#ef4444; color:white; width:18px; height:18px; border-radius:50%; font-size:0.7rem; display:none; align-items:center; justify-content:center; font-weight:700; border:2px solid var(--bg-card);">0</span></a>
+        </li>
+        <li><a href="auth.html" class="g-nav-link" id="nav-auth-btn" style="display:none"><i
+              class="fas fa-sign-in-alt"></i> تسجيل الدخول</a></li>
+        <li><a href="#" class="g-nav-link" id="nav-logout-btn" onclick="logout(); return false;"
+            style="display:none; color:#f87171"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a></li>
+        <li style="margin: 10px 0; border-bottom: 1px solid var(--border); opacity: 0.5;"></li>
+        <li><a href="submit-game.html" class="g-nav-link" id="nav-submit-btn" style="display:none"><i
+              class="fas fa-upload"></i> أرسل لعبتك</a></li>
+        <li><a href="dashboard.html" class="g-nav-link" id="nav-dash-btn" style="display:none"><i
+              class="fas fa-sliders-h"></i> لوحة التحكم</a></li>
+      </ul>
+      <div class="g-theme-trigger" id="theme-toggle">
+        <i class="fas fa-moon"></i>
+        <span>تبديل الوضع</span>
+      </div>
+    </aside>
+
+    <div class="content-wrapper">
+      <div class="contact-container">
+        <div class="contact-info-card">
+          <div>
+            <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 20px;">تحدث معنا!</h2>
+            <p style="opacity: 0.9; margin-bottom: 40px; line-height: 1.6;">لديك اقتراح؟ أو واجهت مشكلة تقنية؟ فريق
+              RobaNos دائماً هنا لمساعدتك.</p>
+
+            <div class="info-item">
+              <i class="fas fa-envelope"></i>
+              <div>
+                <div style="font-size: 0.8rem; opacity: 0.7;">البريد الإلكتروني</div>
+                <div style="font-weight: 700;">support@RobaNos.com</div>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <div>
+                <div style="font-size: 0.8rem; opacity: 0.7;">الموقع</div>
+                <div style="font-weight: 700;">عالم الإنترنت الرقمي</div>
+              </div>
+            </div>
+
+            <div class="map-placeholder">
+              <i class="fas fa-map-marked-alt" style="font-size: 2rem;"></i>
+              <span>خارطة RobaNos الرقمية</span>
+              <div style="font-size: 0.7rem; opacity: 0.6;">(موقعنا في قلوب عشاق الألعاب)</div>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size: 0.9rem; margin-bottom: 15px; font-weight: 600;">تابعنا على:</div>
+            <div class="social-stack">
+              <a href="#" class="social-circle"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="social-circle"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="social-circle"><i class="fab fa-discord"></i></a>
+              <a href="#" class="social-circle"><i class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-form-card" id="form-card-content">
+          <h2 style="color: #fff; margin-bottom: 30px; font-weight: 800;"><i class="fas fa-paper-plane"
+              style="color: var(--primary-light); margin-left: 10px;"></i> أرسل رسالة</h2>
+
+          <!-- Autofill User Info -->
+          <div class="auth-autofill-card" id="autofill-card">
+            <div class="autofill-avatar" id="ua-avatar">S</div>
+            <div class="autofill-info">
+              <div style="font-size:0.9rem; font-weight:700; color:#fff;" id="ua-name">سيف أحمد</div>
+              <div style="font-size:0.75rem; color:var(--text-dim);" id="ua-email">saif@example.com</div>
+            </div>
+            <button class="autofill-btn" onclick="autofillContactInfo()">استخدم بياناتي</button>
+          </div>
+
+          <form id="contact-form" onsubmit="handleContactSubmit(event)">
+            <div class="form-group">
+              <label class="form-label">الاسم الكامل</label>
+              <div class="form-group-icon">
+                <input type="text" class="form-input" id="c-name" placeholder="اسمك الكريم..." required />
+                <i class="fas fa-user"></i>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">البريد الإلكتروني</label>
+              <div class="form-group-icon">
+                <input type="email" class="form-input" id="c-email" placeholder="example@mail.com" required />
+                <i class="fas fa-at"></i>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">الموضوع</label>
+              <div class="form-group-icon">
+                <input type="text" class="form-input" id="c-subject" placeholder="بخصوص ماذا تريد التحدث؟" required />
+                <i class="fas fa-tag"></i>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">الرسالة</label>
+              <textarea class="form-input" id="c-message" rows="5" placeholder="اكتب رسالتك بالتفصيل هنا..." required
+                style="padding-right: 18px !important;"></textarea>
+            </div>
+            <button type="submit" class="btn-primary" id="btn-send-contact"
+              style="width: 100%; padding: 18px; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; gap: 10px;">
+              <span>إرسال الآن</span>
+              <i class="fas fa-paper-plane" style="font-size: 0.9rem;"></i>
+            </button>
+          </form>
+
+          <div class="contact-success-box" id="success-box">
+            <div class="success-icon-circle">
+              <i class="fas fa-check"></i>
+            </div>
+            <h2 style="color: #fff; margin-bottom: 10px;">تم الإرسال بنجاح!</h2>
+            <p style="color: var(--text-dim); line-height: 1.6;">شكراً لتواصلك معنا. سنقوم بمراجعة رسالتك والرد عليك عبر
+              البريد الإلكتروني في أقرب وقت ممكن.</p>
+            <button class="btn-primary" style="margin-top: 30px; padding: 12px 30px;" onclick="resetContactForm()">إرسال
+              رسالة أخرى</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Search Overlay -->
+  <div class="mobile-search-overlay" id="mobile-search-overlay" onclick="closeMobileSearch(event)">
+    <div class="mobile-search-box">
+      <div class="mobile-search-inner" onclick="event.stopPropagation()">
+        <i class="fas fa-search" style="color:var(--text-muted)"></i>
+        <input type="text" id="mobile-search-input" placeholder="ابحث عن لعبة..."
+          onkeydown="if(event.key==='Enter') { if(typeof globalSearch === 'function') globalSearch(this.value); else window.location.href='library.html?search='+encodeURIComponent(this.value); closeMobileSearch(); }">
+        <i class="fas fa-times" style="color:var(--text-dim); padding:10px; margin:-10px; cursor:pointer;"
+          onclick="closeMobileSearch({target: this})"></i>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav" id="bottom-nav">
+    <a href="index.html" class="bottom-nav-item">
+      <div class="bottom-nav-icon"><i class="fas fa-home"></i></div>
+      <span>الرئيسية</span>
+    </a>
+    <a href="library.html" class="bottom-nav-item">
+      <div class="bottom-nav-icon"><i class="fas fa-gamepad"></i></div>
+      <span>المكتبة</span>
+    </a>
+    <div class="bottom-nav-item bottom-nav-center" onclick="openMobileSearch()">
+      <div class="bottom-nav-icon-main"><i class="fas fa-search"></i></div>
+      <span>بحث</span>
+    </div>
+    <a href="videos.html" class="bottom-nav-item">
+      <div class="bottom-nav-icon"><i class="fas fa-play-circle"></i></div>
+      <span>المقاطع</span>
+    </a>
+    <a href="auth.html" class="bottom-nav-item" id="bn-login" style="display:none">
+      <div class="bottom-nav-icon"><i class="fas fa-sign-in-alt"></i></div>
+      <span>دخول</span>
+    </a>
+    <a href="profile.html" class="bottom-nav-item" id="bn-profile" style="display:none; position:relative">
+      <div class="bottom-nav-icon"><i class="fas fa-user-circle"></i></div>
+      <span class="nav-notif-badge"
+        style="position:absolute; top:-5px; left:50%; transform:translateX(10px); background:#ef4444; color:white; width:16px; height:16px; border-radius:50%; font-size:0.6rem; display:none; align-items:center; justify-content:center; font-weight:700; border:2px solid var(--bg);">0</span>
+      <span>حسابي</span>
+    </a>
+  </nav>
+
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/firebase-sync.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    window.addEventListener('authStatusChanged', () => {
+      // Check for session to show autofill
+      const session = getCurrentUser();
+      if (session) {
+        document.getElementById('autofill-card').style.display = 'flex';
+        document.getElementById('ua-name').textContent = session.name || 'مستخدم';
+        document.getElementById('ua-email').textContent = session.email || '';
+        document.getElementById('ua-avatar').textContent = (session.name || 'U').charAt(0).toUpperCase();
+        window.currentUserSession = session;
+      }
+    });
+
+    function autofillContactInfo() {
+      if (window.currentUserSession) {
+        const nameInput = document.getElementById('c-name');
+        const emailInput = document.getElementById('c-email');
+
+        nameInput.value = window.currentUserSession.name || '';
+        emailInput.value = window.currentUserSession.email || '';
+
+        const autofillCard = document.getElementById('autofill-card');
+        autofillCard.style.borderColor = '#10b981';
+        autofillCard.style.background = 'rgba(16, 185, 129, 0.1)';
+        const btn = autofillCard.querySelector('.autofill-btn');
+        btn.innerHTML = '<i class="fas fa-check"></i> تم التعبئة';
+        btn.style.background = '#10b981';
+      }
+    }
+
+    async function handleContactSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btn-send-contact');
+      const form = document.getElementById('contact-form');
+      const successBox = document.getElementById('success-box');
+      const title = document.querySelector('#form-card-content h2');
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> جاري الإرسال...';
+
+      const name = document.getElementById('c-name').value;
+      const email = document.getElementById('c-email').value;
+      const subject = document.getElementById('c-subject').value;
+      const message = document.getElementById('c-message').value;
+
+      const newMessage = {
+        id: Date.now(),
+        name: name,
+        email: email,
+        subject: subject,
+        message: message,
+        date: new Date().toISOString(),
+        status: 'unread'
+      };
+
+      // 1. Save to Admin Inbox
+      const inbox = JSON.parse(localStorage.getItem('gv_inbox') || '[]');
+      inbox.unshift(newMessage);
+      localStorage.setItem('gv_inbox', JSON.stringify(inbox));
+
+      // 2. Add Notification for the User (if logged in)
+      const user = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
+      if (user && typeof addNotification === 'function') {
+        addNotification(
+          user.name,
+          'success',
+          'تم استلام رسالتك',
+          'شكراً لتواصلك معنا بخصوص (' + subject + ')، سنقوم بمراجعة طلبك والرد عليك قريباً.'
+        );
+      }
+
+      setTimeout(() => {
+        form.style.display = 'none';
+        if (title) title.style.display = 'none';
+        successBox.style.display = 'block';
+
+        // Update global notification badge across tabs
+        if (typeof updateNotificationBadge === 'function') updateNotificationBadge();
+      }, 1500);
+    }
+
+    function resetContactForm() {
+      const form = document.getElementById('contact-form');
+      const successBox = document.getElementById('success-box');
+      const title = document.querySelector('#form-card-content h2');
+      const btn = document.getElementById('btn-send-contact');
+
+      form.reset();
+      form.style.display = 'block';
+      if (title) title.style.display = 'block';
+      successBox.style.display = 'none';
+      btn.disabled = false;
+      btn.innerHTML = '<span>إرسال الآن</span> <i class="fas fa-paper-plane" style="font-size: 0.9rem;"></i>';
+    }
+  </script>
+</body>
+
+</html>
