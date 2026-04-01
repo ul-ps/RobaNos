@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ملفي الشخصي - RobaNos</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="js/theme.js"></script>
+  <script src="js/app.js"></script>
+</head>
+
+<body class="profile-body">
+
+  <div class="bg-particles"></div>
+  <canvas id="bg-canvas"></canvas>
+
+  <div class="main-layout">
+    <!-- Sidebar -->
+    <aside class="g-sidebar">
+      <a href="index.html" class="g-logo">
+        <i class="fas fa-cubes site-brand-icon"></i>
+        <span class="g-logo-text site-brand-name">RobaNos</span>
+      </a>
+
+      <div class="nav-search" style="margin-bottom: 30px; width: 100%;">
+        <input type="text" id="main-search" placeholder="ابحث عن لعبة..."
+          onkeydown="if(event.key==='Enter') globalSearch(this.value)" style="width:100%" />
+        <i class="fas fa-search nav-search-icon" style="left: 15px; right: auto; cursor:pointer;"
+          onclick="globalSearch(document.getElementById('main-search').value)"></i>
+      </div>
+
+      <ul class="g-nav">
+        <li><a href="index.html" class="g-nav-link"><i class="fas fa-home"></i> الرئيسية</a></li>
+        <li><a href="videos.html" class="g-nav-link"><i class="fas fa-play-circle"></i> الفيديوهات</a></li>
+        <li><a href="library.html" class="g-nav-link"><i class="fas fa-gamepad"></i> المكتبة</a></li>
+        <li><a href="upcoming.html" class="g-nav-link"><i class="fas fa-calendar-alt"></i> قادمة قريباً</a></li>
+        <li style="margin: 10px 0; border-bottom: 1px solid var(--border); opacity: 0.5;"></li>
+        <li><a href="profile.html" class="g-nav-link active" id="nav-user-link"
+            style="display:none; position:relative;"><i class="fas fa-user-circle"></i> ملفي الشخصي <span
+              class="nav-notif-badge"
+              style="position:absolute; top:50%; left:20px; transform:translateY(-50%); background:#ef4444; color:white; width:18px; height:18px; border-radius:50%; font-size:0.7rem; display:none; align-items:center; justify-content:center; font-weight:700; border:2px solid var(--bg-card);">0</span></a>
+        </li>
+        <li><a href="auth.html" class="g-nav-link" id="nav-auth-btn" style="display:none"><i
+              class="fas fa-sign-in-alt"></i> تسجيل الدخول</a></li>
+        <li><a href="#" class="g-nav-link" id="nav-logout-btn" onclick="logout(); return false;"
+            style="display:none; color:#f87171"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a></li>
+        <li style="margin: 10px 0; border-bottom: 1px solid var(--border); opacity: 0.5;"></li>
+        <li><a href="submit-game.html" class="g-nav-link" id="nav-submit-btn" style="display:none"><i
+              class="fas fa-upload"></i> أرسل لعبتك</a></li>
+        <li><a href="dashboard.html" class="g-nav-link" id="nav-dash-btn" style="display:none"><i
+              class="fas fa-sliders-h"></i> لوحة التحكم</a></li>
+      </ul>
+
+      <div class="g-theme-trigger" id="theme-toggle">
+        <i class="fas fa-moon"></i>
+        <span>تبديل الوضع</span>
+      </div>
+    </aside>
+
+    <!-- Content -->
+    <div class="content-wrapper">
+      <div class="profile-page" id="profile-content" style="display:none; padding: 40px 20px;">
+
+        <!-- Hero -->
+        <div class="profile-hero" style="position:relative">
+          <div class="profile-avatar" id="pf-avatar-wrap">
+            <span id="pf-avatar"></span>
+            <div class="profile-avatar-ring"></div>
+          </div>
+          <div class="profile-name" id="pf-name"></div>
+          <div class="profile-email" id="pf-email"></div>
+          <div id="pf-role-badge"></div>
+
+          <!-- Social Links Container -->
+          <div id="pf-social-links" style="display:flex; justify-content:center; gap:12px; margin-top:15px;"></div>
+
+          <button class="settings-trigger" onclick="openSettingsModal()" title="إعدادات الحساب">
+            <i class="fas fa-cog"></i>
+          </button>
+        </div>
+
+        <!-- Admin CTA -->
+        <a href="dashboard.html" class="admin-cta" id="admin-cta" style="display:none">
+          <div class="admin-cta-icon"><i class="fas fa-chart-line"></i></div>
+          <div style="flex:1">
+            <div class="admin-cta-title">لوحة التحكم</div>
+            <div class="admin-cta-sub">إدارة الألعاب، الإحصائيات، والمحتوى</div>
+          </div>
+          <i class="fas fa-arrow-left admin-cta-arrow"></i>
+        </a>
+
+        <!-- Info Cards -->
+        <div class="profile-cards">
+          <div class="profile-info-card">
+            <div class="pic-label"><i class="fas fa-calendar-alt"></i> تاريخ الانضمام</div>
+            <div class="pic-value" id="pf-join"></div>
+          </div>
+          <div class="profile-info-card">
+            <div class="pic-label"><i class="fas fa-download"></i> تحميلات عبر الموقع</div>
+            <div class="pic-value" id="pf-downloads">0 تحميل</div>
+          </div>
+          <div class="profile-info-card">
+            <div class="pic-label"><i class="fas fa-shield-alt"></i> حالة الحساب</div>
+            <div class="pic-value" style="color:#4ade80"><i class="fas fa-check-circle"></i> نشط</div>
+          </div>
+          <div class="profile-info-card">
+            <div class="pic-label"><i class="fas fa-star"></i> نوع الحساب</div>
+            <div class="pic-value" id="pf-type"></div>
+          </div>
+        </div>
+
+        <!-- Notifications -->
+        <div class="profile-section" id="pf-notif-section">
+          <div class="profile-section-header" style="justify-content:space-between">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <i class="fas fa-bell"></i> الإشعارات والرسائل
+              <button class="btn-ghost" onclick="sendTestNotification()"
+                style="font-size:0.7rem; padding:4px 8px; border:1px solid var(--border); border-radius:8px;">
+                <i class="fas fa-vial"></i> تجربة إشعار
+              </button>
+            </div>
+            <button class="btn-ghost" onclick="clearAllNotifications()">
+              <i class="fas fa-trash-alt"></i> مسح الكل
+            </button>
+          </div>
+          <div class="profile-section-body" id="pf-notif-list" style="padding:0">
+            <!-- Notifs load here -->
+          </div>
+        </div>
+
+        <!-- User Submissions -->
+        <div class="profile-section" id="pf-submissions-section" style="display:none">
+          <div class="profile-section-header" style="justify-content:space-between">
+            <div><i class="fas fa-upload"></i> ألعابي المُرسلة</div>
+            <a href="submit-game.html" class="btn-outline" style="font-size:0.75rem;padding:6px 14px"><i
+                class="fas fa-plus"></i> إرسال لعبة</a>
+          </div>
+          <div class="profile-section-body" style="padding:0">
+            <div id="pf-submissions-grid" class="sub-grid" style="padding: 20px 0;"></div>
+            <div id="pf-no-submissions" style="display:none;padding:32px;text-align:center;color:var(--text-dim)">
+              لم تقم بإرسال أي ألعاب بعد.
+            </div>
+          </div>
+        </div>
+
+        <!-- Logout -->
+        <button class="btn-logout" onclick="logout()" style="margin-top:20px">
+          <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+        </button>
+
+      </div>
+
+      <!-- Not logged in message -->
+      <div id="not-logged" style="display:none;text-align:center;padding:150px 20px">
+        <div style="font-size:4rem;margin-bottom:16px;color:var(--text-dim)"><i class="fas fa-lock"></i></div>
+        <h2 style="font-family:'Rajdhani',sans-serif;font-size:1.8rem;margin-bottom:10px">يرجى تسجيل الدخول</h2>
+        <a href="auth.html" class="btn-primary">تسجيل الدخول</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Detail Modal -->
+  <div class="gv-modal" id="notif-detail-modal" onclick="closeNotifModal(event)">
+    <div class="gv-modal-box" onclick="event.stopPropagation()" style="max-width:460px">
+      <div class="gv-modal-header">
+        <div class="gv-modal-title" id="notif-modal-title" style="display:flex;align-items:center;gap:12px">
+          <div id="notif-modal-icon"
+            style="width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;">
+          </div>
+          <span id="notif-modal-title-text"></span>
+        </div>
+        <button class="gv-modal-close" onclick="closeNotifModal()">×</button>
+      </div>
+      <div class="gv-modal-body" style="padding:28px">
+        <div id="notif-modal-message"
+          style="font-size:1rem;color:var(--text-muted);line-height:1.8;margin-bottom:20px;"></div>
+
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div
+            style="display:flex;align-items:center;gap:8px;padding:12px 16px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;">
+            <i class="far fa-clock" style="color:var(--text-dim);font-size:0.85rem;"></i>
+            <span id="notif-modal-date" style="font-size:0.82rem;color:var(--text-dim);"></span>
+          </div>
+
+          <button id="notif-modal-watch-btn"
+            style="display:none; width:100%; padding:14px; border-radius:14px; border:none; background:var(--gradient-primary); color:#fff; font-family:inherit; font-size:1rem; font-weight:700; cursor:pointer; transition:0.25s; align-items:center; justify-content:center; gap:10px;">
+            <i class="fas fa-play-circle"></i> شاهد الفيديو
+          </button>
+
+          <button onclick="closeNotifModal()"
+            style="width:100%; padding:13px; border-radius:14px; border:1px solid var(--border); background:rgba(255,255,255,0.05); color:var(--text); font-family:inherit; font-size:1rem; font-weight:600; cursor:pointer; transition:0.25s;">إغلاق</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="gv-modal" id="settings-modal" onclick="closeSettingsModal(event)">
+    <div class="gv-modal-box" onclick="event.stopPropagation()" style="max-width:440px">
+      <div class="gv-modal-header">
+        <div style="display:flex;align-items:center;gap:10px">
+          <button id="settings-back-btn" onclick="showSettingsMenu()"
+            style="display:none;background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1.1rem;padding:4px 8px 4px 0;transition:0.2s;"
+            title="رجوع">
+            <i class="fas fa-arrow-right"></i>
+          </button>
+          <div class="gv-modal-title"><i class="fas fa-cog"></i> <span id="settings-modal-title">إعدادات الحساب</span>
+          </div>
+        </div>
+        <button class="gv-modal-close" onclick="closeSettingsModal()">×</button>
+      </div>
+      <div class="gv-modal-body">
+
+        <!-- Step 1: Choose what to edit -->
+        <div id="settings-menu" style="display:flex; flex-direction:column; gap:14px;">
+          <button onclick="showSettingsPane('name')" style="
+          display:flex; align-items:center; gap:16px;
+          padding:18px 20px; border-radius:16px;
+          border:1px solid var(--border); background:rgba(255,255,255,0.03);
+          color:var(--text); font-family:inherit; font-size:1rem; font-weight:600;
+          cursor:pointer; transition:all 0.25s; text-align:right; width:100%;
+        " onmouseover="this.style.borderColor='var(--primary-light)';this.style.background='rgba(124,58,237,0.08)'"
+            onmouseout="this.style.borderColor='var(--border)';this.style.background='rgba(255,255,255,0.03)'">
+            <div
+              style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:#fff;flex-shrink:0;">
+              <i class="fas fa-user-edit"></i>
+            </div>
+            <div>
+              <div>تعديل الاسم المستعار</div>
+              <div style="font-size:0.8rem;color:var(--text-muted);font-weight:400;margin-top:2px;">تغيير الاسم الظاهر
+                في الملف الشخصي</div>
+            </div>
+            <i class="fas fa-chevron-left" style="margin-right:auto;color:var(--text-dim);font-size:0.85rem;"></i>
+          </button>
+
+          <button onclick="showSettingsPane('pass')" style="
+          display:flex; align-items:center; gap:16px;
+          padding:18px 20px; border-radius:16px;
+          border:1px solid var(--border); background:rgba(255,255,255,0.03);
+          color:var(--text); font-family:inherit; font-size:1rem; font-weight:600;
+          cursor:pointer; transition:all 0.25s; text-align:right; width:100%;
+        " onmouseover="this.style.borderColor='var(--primary-light)';this.style.background='rgba(124,58,237,0.08)'"
+            onmouseout="this.style.borderColor='var(--border)';this.style.background='rgba(255,255,255,0.03)'">
+            <div
+              style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#ef4444,#b91c1c);display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:#fff;flex-shrink:0;">
+              <i class="fas fa-lock"></i>
+            </div>
+            <div>
+              <div>الأمان وتغيير كلمة المرور</div>
+              <div style="font-size:0.8rem;color:var(--text-muted);font-weight:400;margin-top:2px;">تحديث كلمة المرور
+                لحماية حسابك</div>
+            </div>
+            <i class="fas fa-chevron-left" style="margin-right:auto;color:var(--text-dim);font-size:0.85rem;"></i>
+          </button>
+
+          <button onclick="showSettingsPane('social')" style="
+          display:flex; align-items:center; gap:16px;
+          padding:18px 20px; border-radius:16px;
+          border:1px solid var(--border); background:rgba(255,255,255,0.03);
+          color:var(--text); font-family:inherit; font-size:1rem; font-weight:600;
+          cursor:pointer; transition:all 0.25s; text-align:right; width:100%;
+        " onmouseover="this.style.borderColor='var(--primary-light)';this.style.background='rgba(124,58,237,0.08)'"
+            onmouseout="this.style.borderColor='var(--border)';this.style.background='rgba(255,255,255,0.03)'">
+            <div
+              style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#1d4ed8,#1e40af);display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:#fff;flex-shrink:0;">
+              <i class="fas fa-share-alt"></i>
+            </div>
+            <div>
+              <div>روابط التواصل الاجتماعي</div>
+              <div style="font-size:0.8rem;color:var(--text-muted);font-weight:400;margin-top:2px;">ربط حساباتك (فيسبوك،
+                إكس، يوتيوب...)</div>
+            </div>
+            <i class="fas fa-chevron-left" style="margin-right:auto;color:var(--text-dim);font-size:0.85rem;"></i>
+          </button>
+        </div>
+
+        <!-- Step 2a: Edit Name -->
+        <div id="settings-pane-name" style="display:none">
+          <div class="profile-form-row" style="margin-bottom:12px">
+            <input type="text" id="edit-name-input" class="pf-input" placeholder="الاسم الجديد" style="flex:1" />
+            <button class="btn-save" onclick="doUpdateName()" style="border-radius:12px; padding: 0 20px;"><i
+                class="fas fa-save"></i> تحديث</button>
+          </div>
+          <div id="name-update-msg" class="update-msg"></div>
+        </div>
+
+        <!-- Step 2b: Change Password -->
+        <div id="settings-pane-pass" style="display:none">
+          <div class="profile-form-group">
+            <input type="password" id="old-pass" placeholder="كلمة المرور الحالية" class="pf-input"
+              style="margin-bottom:12px; width:100%" />
+            <input type="password" id="new-pass" placeholder="كلمة المرور الجديدة" class="pf-input"
+              style="margin-bottom:16px; width:100%" />
+            <button class="btn-primary" style="width:100%; padding:14px; font-weight:700"
+              onclick="doUpdatePassword()">تحديث كلمة المرور</button>
+          </div>
+          <div id="pass-update-msg" class="update-msg" style="margin-top:10px"></div>
+        </div>
+        <!-- Step 2c: Social Links -->
+        <div id="settings-pane-social" style="display:none">
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div style="position:relative">
+              <i class="fab fa-facebook"
+                style="position:absolute; right:14px; top:50%; transform:translateY(-50%); color:#1877f2"></i>
+              <input type="text" id="social-fb" placeholder="رابط فيسبوك" class="pf-input"
+                style="padding-right:40px; width:100%" />
+            </div>
+            <div style="position:relative">
+              <i class="fab fa-twitter"
+                style="position:absolute; right:14px; top:50%; transform:translateY(-50%); color:#1da1f2"></i>
+              <input type="text" id="social-tw" placeholder="رابط تويتر (X)" class="pf-input"
+                style="padding-right:40px; width:100%" />
+            </div>
+            <div style="position:relative">
+              <i class="fab fa-instagram"
+                style="position:absolute; right:14px; top:50%; transform:translateY(-50%); color:#e1306c"></i>
+              <input type="text" id="social-ig" placeholder="رابط إنستغرام" class="pf-input"
+                style="padding-right:40px; width:100%" />
+            </div>
+            <div style="position:relative">
+              <i class="fab fa-youtube"
+                style="position:absolute; right:14px; top:50%; transform:translateY(-50%); color:#ff0000"></i>
+              <input type="text" id="social-yt" placeholder="رابط يوتيوب" class="pf-input"
+                style="padding-right:40px; width:100%" />
+            </div>
+            <div style="position:relative">
+              <i class="fab fa-discord"
+                style="position:absolute; right:14px; top:50%; transform:translateY(-50%); color:#5865f2"></i>
+              <input type="text" id="social-dc" placeholder="رابط ديسكورد" class="pf-input"
+                style="padding-right:40px; width:100%" />
+            </div>
+            <button class="btn-primary" style="width:100%; padding:14px; font-weight:700; margin-top:8px"
+              onclick="doUpdateSocial()">حفظ الروابط</button>
+          </div>
+          <div id="social-update-msg" class="update-msg" style="margin-top:10px"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Mobile Search Overlay -->
+  <div class="mobile-search-overlay" id="mobile-search-overlay" onclick="closeMobileSearch(event)">
+    <div class="mobile-search-box">
+      <div class="mobile-search-inner" onclick="event.stopPropagation()">
+        <i class="fas fa-search" style="color:var(--text-muted)"></i>
+        <input type="text" id="mobile-search-input" placeholder="ابحث عن لعبة..."
+          onkeydown="if(event.key==='Enter') { if(typeof globalSearch === 'function') globalSearch(this.value); else window.location.href='library.html?search='+encodeURIComponent(this.value); closeMobileSearch(); }">
+        <i class="fas fa-times" style="color:var(--text-dim); padding:10px; margin:-10px; cursor:pointer;"
+          onclick="closeMobileSearch({target: this})"></i>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav" id="bottom-nav">
+    <a href="index.html" class="bottom-nav-item">
+      <div class="bottom-nav-icon"><i class="fas fa-home"></i></div>
+      <span>الرئيسية</span>
+    </a>
+    <a href="library.html" class="bottom-nav-item">
+      <div class="bottom-nav-icon"><i class="fas fa-gamepad"></i></div>
+      <span>المكتبة</span>
+    </a>
+    <div class="bottom-nav-item bottom-nav-center" onclick="openMobileSearch()">
+      <div class="bottom-nav-icon-main"><i class="fas fa-search"></i></div>
+      <span>بحث</span>
+    </div>
+    <a href="videos.html" class="bottom-nav-item">
+      <div class="bottom-nav-icon"><i class="fas fa-play-circle"></i></div>
+      <span>المقاطع</span>
+    </a>
+    <a href="profile.html" class="bottom-nav-item active" style="position:relative">
+      <div class="bottom-nav-icon"><i class="fas fa-user-circle"></i></div>
+      <span class="nav-notif-badge"
+        style="position:absolute; top:-5px; left:50%; transform:translateX(10px); background:#ef4444; color:white; width:16px; height:16px; border-radius:50%; font-size:0.6rem; display:none; align-items:center; justify-content:center; font-weight:700; border:2px solid var(--bg);">0</span>
+      <span>حسابي</span>
+    </a>
+  </nav>
+
+  <script src="js/auth.js"></script>
+  <script>
+    window.addEventListener('firebaseDataReady', () => {
+      if (typeof injectNavAuth === 'function') injectNavAuth();
+      const user = getCurrentUser();
+      if (!user) { document.getElementById('not-logged').style.display = 'block'; return; }
+      document.getElementById('profile-content').style.display = 'block';
+
+      document.getElementById('pf-avatar').innerHTML = '<i class="fas fa-user-astronaut"></i>';
+      document.getElementById('pf-name').textContent = user.name;
+      document.getElementById('pf-email').textContent = user.email;
+      document.getElementById('pf-join').textContent = user.joinDate || '—';
+      document.getElementById('edit-name-input').value = user.name;
+      document.getElementById('pf-downloads').textContent = (user.downloads || 0) + ' تحميل';
+
+      // Load social inputs
+      const s = user.social || {};
+      document.getElementById('social-fb').value = s.facebook || '';
+      document.getElementById('social-tw').value = s.twitter || '';
+      document.getElementById('social-ig').value = s.instagram || '';
+      document.getElementById('social-yt').value = s.youtube || '';
+      document.getElementById('social-dc').value = s.discord || '';
+      renderSocialLinks(s);
+
+      const admin = isAdmin();
+      const extraGames = JSON.parse(localStorage.getItem('gv_extra_games') || '[]');
+      const hasApprovedGames = extraGames.some(g => g.submittedBy === user.name);
+
+      if (admin) {
+        document.getElementById('pf-role-badge').innerHTML = '<span class="profile-role-badge role-admin"><i class="fas fa-crown"></i> مشرف النظام</span>';
+        document.getElementById('pf-type').innerHTML = '<i class="fas fa-crown" style="color:#fbbf24"></i> أدمن';
+        document.getElementById('admin-cta').style.display = 'flex';
+      } else if (hasApprovedGames) {
+        document.getElementById('pf-role-badge').innerHTML = '<span class="profile-role-badge" style="background:rgba(52,211,153,0.1); color:#10b981; border:1px solid rgba(52,211,153,0.2); padding:6px 14px; border-radius:20px; font-size:0.85rem; font-weight:700;"><i class="fas fa-code"></i> مطور معتمد</span>';
+        document.getElementById('pf-type').innerHTML = '<i class="fas fa-terminal" style="color:#10b981"></i> مطور مساهم';
+        document.getElementById('pf-submissions-section').style.display = 'block';
+        if (typeof renderUserSubmissionsProfile === 'function') renderUserSubmissionsProfile(user.id);
+      } else {
+        document.getElementById('pf-role-badge').innerHTML = '<span class="profile-role-badge role-user"><i class="fas fa-user"></i> عضو</span>';
+        document.getElementById('pf-type').innerHTML = '<i class="fas fa-gamepad" style="color:var(--primary-light)"></i> لاعب';
+        document.getElementById('pf-submissions-section').style.display = 'block';
+        if (typeof renderUserSubmissionsProfile === 'function') renderUserSubmissionsProfile(user.id);
+      }
+    });
+
+    function renderUserSubmissionsProfile(userId) {
+      const grid = document.getElementById('pf-submissions-grid');
+      const noSubs = document.getElementById('pf-no-submissions');
+      const user = getCurrentUser();
+
+      const rawSubs = JSON.parse(localStorage.getItem('gv_submissions') || '[]')
+        .filter(s => (s.userId === userId || s.submitter === user.name) && s.status !== 'approved');
+
+      const extraGames = JSON.parse(localStorage.getItem('gv_extra_games') || '[]')
+        .filter(g => g.submitterId === user.uid || g.submittedBy === user.name);
+
+      const approvedSubs = extraGames.map(g => ({
+        id: g.id,
+        name: g.name,
+        category: g.category,
+        status: 'approved',
+        imageUrl: g.imageUrl,
+        emoji: g.emoji || '<i class="fas fa-gamepad"></i>',
+        size: g.size,
+        linkId: g.id
+      }));
+
+      const pendingTargetIds = rawSubs.map(s => s.targetId).filter(Boolean);
+      const filteredApproved = approvedSubs.filter(a => !pendingTargetIds.includes(a.id));
+
+      const subs = [...rawSubs, ...filteredApproved];
+
+      if (subs.length === 0) { noSubs.style.display = 'block'; grid.style.display = 'none'; return; }
+      noSubs.style.display = 'none';
+      grid.style.display = 'grid';
+      subs.reverse();
+
+      grid.innerHTML = subs.map(g => {
+        let statusHtml = '';
+        if (g.status === 'approved') statusHtml = '<span style="background:rgba(16,185,129,0.15);color:#10b981;border:1px solid rgba(16,185,129,0.3);padding:6px 12px;border-radius:20px;font-size:0.75rem;font-weight:700;backdrop-filter:blur(4px);display:inline-flex;align-items:center;gap:5px;"><i class="fas fa-check-circle"></i> مقبولة</span>';
+        else if (g.status === 'rejected') statusHtml = '<span style="background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.3);padding:6px 12px;border-radius:20px;font-size:0.75rem;font-weight:700;backdrop-filter:blur(4px);display:inline-flex;align-items:center;gap:5px;"><i class="fas fa-times-circle"></i> مرفوضة</span>';
+        else statusHtml = '<span style="background:rgba(245,158,11,0.15);color:#f59e0b;border:1px solid rgba(245,158,11,0.3);padding:6px 12px;border-radius:20px;font-size:0.75rem;font-weight:700;backdrop-filter:blur(4px);display:inline-flex;align-items:center;gap:5px;"><i class="fas fa-clock"></i> قيد المراجعة</span>';
+
+        const bgStyle = g.imageUrl ? `background: linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('${g.imageUrl}') center/cover no-repeat;` : `background: var(--gradient-primary);`;
+        const emojiOrEmpty = g.imageUrl ? '' : (getCategoryIcon(g.category, g.emoji));
+        const viewUrl = g.status === 'approved' ? `game.html?id=${g.linkId}` : `game.html?id=${g.id || g.subId}`;
+        const editId = g.status === 'approved' ? g.linkId : (g.subId || g.id);
+        const isAppr = g.status === 'approved';
+
+        return `
+      <div class="game-card" style="display:flex; flex-direction:column; overflow:hidden; border:1px solid var(--border); transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 15px 35px rgba(0,0,0,0.4)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 8px 30px rgba(0,0,0,0.2)'">
+        <div style="height:160px; ${bgStyle} position:relative; display:flex; align-items:center; justify-content:center; font-size:4rem; color:rgba(255,255,255,0.8);">
+          ${emojiOrEmpty}
+        </div>
+        <div style="padding:20px; flex:1; display:flex; flex-direction:column; background:var(--bg-card);">
+          <div style="margin-bottom:12px;">
+            ${statusHtml}
+          </div>
+          <div style="font-family:'Rajdhani', sans-serif; font-size:1.3rem; font-weight:700; color:var(--text-main); margin-bottom:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${g.name}</div>
+          <div style="font-size:0.9rem; color:var(--text-muted); display:flex; align-items:center; gap:8px; margin-bottom:20px;">
+            <span style="background:var(--bg); border:1px solid var(--border); padding:4px 10px; border-radius:8px;"><i class="fas fa-tag" style="color:var(--primary-light)"></i> ${g.category}</span>
+            <span style="background:var(--bg); border:1px solid var(--border); padding:4px 10px; border-radius:8px;"><i class="fas fa-hdd" style="color:var(--text-dim)"></i> ${g.size || '-'}</span>
+          </div>
+          <div style="margin-top:auto; display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px;">
+             <button style="padding:10px; border-radius:10px; border:none; background:var(--gradient-primary); color:white; font-weight:700; cursor:pointer; font-family:inherit; font-size:0.85rem; transition:0.3s;" onclick="window.location.href='${viewUrl}'">
+               <i class="fas fa-eye"></i> معاينة
+             </button>
+             <button style="padding:10px; border-radius:10px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-weight:700; cursor:pointer; font-family:inherit; font-size:0.85rem; transition:0.3s;" onclick="window.location.href='submit-game.html?edit=${editId}'">
+               <i class="fas fa-pen"></i> تعديل
+             </button>
+             <button style="padding:10px; border-radius:10px; border:1px solid rgba(239,68,68,0.3); background:rgba(239,68,68,0.1); color:#ef4444; font-weight:700; cursor:pointer; font-family:inherit; font-size:0.85rem; transition:0.3s;" onclick="deleteFromProfile('${editId}', ${isAppr})">
+               <i class="fas fa-trash"></i> حذف
+             </button>
+          </div>
+        </div>
+      </div>
+      `;
+      }).join('');
+    }
+
+    function deleteFromProfile(id, isApproved) {
+      if (!confirm('هل أنت متأكد من رغبتك في حذف هذه اللعبة؟')) return;
+      const user = getCurrentUser();
+      if (isApproved) {
+        const subs = JSON.parse(localStorage.getItem('gv_submissions') || '[]');
+        const extraGames = JSON.parse(localStorage.getItem('gv_extra_games') || '[]');
+        const game = extraGames.find(g => g.id == id);
+
+        if (game) {
+          subs.push({
+            subId: 'SUB_' + Date.now(),
+            id: Date.now(),
+            type: 'delete',
+            targetId: id,
+            userId: user.id,
+            userName: user.name,
+            date: new Date().toLocaleDateString('ar-EG') + ' (طلب حذف)',
+            status: 'pending',
+            name: game.name,
+            category: game.category,
+            imageUrl: game.imageUrl
+          });
+          localStorage.setItem('gv_submissions', JSON.stringify(subs));
+          alert('تم إرسال طلب الحذف للمراجعة بنجاح.');
+        }
+      } else {
+        let subs = JSON.parse(localStorage.getItem('gv_submissions') || '[]');
+        localStorage.setItem('gv_submissions', JSON.stringify(subs.filter(s => s.subId != id && s.id != id)));
+        alert('تم الحذف بنجاح');
+      }
+      renderUserSubmissionsProfile(user.id);
+    }
+
+    function doUpdateName() {
+      const val = document.getElementById('edit-name-input').value.trim();
+      const msg = document.getElementById('name-update-msg');
+      const result = updateName(val);
+      if (result.ok) {
+        msg.textContent = '✅ تم تحديث الاسم بنجاح';
+        msg.className = 'update-msg success';
+        document.getElementById('pf-name').textContent = val;
+      } else {
+        msg.textContent = result.msg;
+        msg.className = 'update-msg error';
+      }
+    }
+
+    function doUpdatePassword() {
+      const oldP = document.getElementById('old-pass').value;
+      const newP = document.getElementById('new-pass').value;
+      const msg = document.getElementById('pass-update-msg');
+
+      if (!oldP || !newP) {
+        msg.textContent = '⚠️ يرجى تعبئة جميع الحقول';
+        msg.className = 'update-msg error';
+        return;
+      }
+
+      const res = updatePassword(oldP, newP);
+      if (res.ok) {
+        msg.textContent = '✅ تم تغيير كلمة المرور بنجاح';
+        msg.className = 'update-msg success';
+        document.getElementById('old-pass').value = '';
+        document.getElementById('new-pass').value = '';
+      } else {
+        msg.textContent = '❌ ' + res.msg;
+        msg.className = 'update-msg error';
+      }
+    }
+
+    function openSettingsModal() {
+      const modal = document.getElementById('settings-modal');
+      if (modal) {
+        showSettingsMenu(); // always start at menu
+        modal.style.display = 'flex';
+        setTimeout(() => modal.classList.add('show'), 10);
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function showSettingsMenu() {
+      document.getElementById('settings-menu').style.display = 'flex';
+      document.getElementById('settings-pane-name').style.display = 'none';
+      document.getElementById('settings-pane-pass').style.display = 'none';
+      document.getElementById('settings-pane-social').style.display = 'none';
+      document.getElementById('settings-back-btn').style.display = 'none';
+      document.getElementById('settings-modal-title').textContent = 'إعدادات الحساب';
+      // clear messages
+      document.getElementById('name-update-msg').textContent = '';
+      document.getElementById('pass-update-msg').textContent = '';
+      document.getElementById('social-update-msg').textContent = '';
+    }
+
+    function showSettingsPane(pane) {
+      document.getElementById('settings-menu').style.display = 'none';
+      document.getElementById('settings-pane-name').style.display = 'none';
+      document.getElementById('settings-pane-pass').style.display = 'none';
+      document.getElementById('settings-pane-social').style.display = 'none';
+      document.getElementById('settings-back-btn').style.display = 'inline-flex';
+
+      if (pane === 'name') {
+        document.getElementById('settings-pane-name').style.display = 'block';
+        document.getElementById('settings-modal-title').textContent = 'تعديل الاسم المستعار';
+      } else if (pane === 'pass') {
+        document.getElementById('settings-pane-pass').style.display = 'block';
+        document.getElementById('settings-modal-title').textContent = 'تغيير كلمة المرور';
+      } else if (pane === 'social') {
+        document.getElementById('settings-pane-social').style.display = 'block';
+        document.getElementById('settings-modal-title').textContent = 'روابط التواصل الاجتماعي';
+      }
+    }
+
+    function doUpdateSocial() {
+      const links = {
+        facebook: document.getElementById('social-fb').value.trim(),
+        twitter: document.getElementById('social-tw').value.trim(),
+        instagram: document.getElementById('social-ig').value.trim(),
+        youtube: document.getElementById('social-yt').value.trim(),
+        discord: document.getElementById('social-dc').value.trim()
+      };
+      const res = updateSocialLinks(links);
+      const msg = document.getElementById('social-update-msg');
+      if (res.ok) {
+        msg.textContent = '✅ تم حفظ الروابط بنجاح';
+        msg.className = 'update-msg success';
+        renderSocialLinks(links);
+      } else {
+        msg.textContent = '❌ فشل في الحفظ';
+        msg.className = 'update-msg error';
+      }
+    }
+
+    function renderSocialLinks(links) {
+      const container = document.getElementById('pf-social-links');
+      if (!container) return;
+
+      let html = '';
+      const platforms = [
+        { key: 'facebook', icon: 'fab fa-facebook', color: '#1877f2' },
+        { key: 'twitter', icon: 'fab fa-twitter', color: '#1da1f2' },
+        { key: 'instagram', icon: 'fab fa-instagram', color: '#e1306c' },
+        { key: 'youtube', icon: 'fab fa-youtube', color: '#ff0000' },
+        { key: 'discord', icon: 'fab fa-discord', color: '#5865f2' }
+      ];
+
+      platforms.forEach(p => {
+        const url = links[p.key];
+        if (url && url.length > 5) {
+          html += `
+          <a href="${url}" target="_blank" style="
+            width:36px; height:36px; border-radius:10px;
+            background:rgba(255,255,255,0.05); border:1px solid var(--border);
+            display:flex; align-items:center; justify-content:center;
+            color:${p.color}; transition:0.3s; font-size:1.1rem;
+          " onmouseover="this.style.background='rgba(255,255,255,0.1)';this.style.transform='scale(1.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.transform='scale(1)'">
+            <i class="${p.icon}"></i>
+          </a>
+        `;
+        }
+      });
+
+      container.innerHTML = html;
+    }
+
+    function closeSettingsModal(e) {
+      const modal = document.getElementById('settings-modal');
+      if (e && e.target !== modal && !e.target.classList.contains('gv-modal-close')) return;
+      if (modal) {
+        modal.classList.remove('show');
+        setTimeout(() => modal.style.display = 'none', 300);
+        document.body.style.overflow = '';
+        document.getElementById('name-update-msg').textContent = '';
+        document.getElementById('pass-update-msg').textContent = '';
+      }
+    }
+
+    async function renderNotifications() {
+      const list = document.getElementById('pf-notif-list');
+      if (!list) return;
+
+      const user = getCurrentUser();
+      if (!user || !user.name) return;
+      const name = user.name.trim();
+
+      // Show loader
+      list.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-dim)"><i class="fas fa-spinner fa-spin"></i> جاري جلب الإشعارات...</div>`;
+
+      // 1. Get Personal Local Notifications
+      const personalNotifs = getNotifications(name);
+
+      let allNotifs = [...personalNotifs];
+
+      // 2. Fetch Global Broadcasts from Firestore
+      try {
+        if (window.db) {
+          const snapshot = await db.collection('broadcast_notifications')
+            .orderBy('timestamp', 'desc')
+            .limit(10)
+            .get();
+
+          snapshot.forEach(doc => {
+            const data = doc.data();
+            // Convert to matching format
+            allNotifs.push({
+              id: 'global_' + doc.id,
+              type: 'info',
+              title: data.title,
+              message: data.body,
+              date: data.timestamp ? new Date(data.timestamp.toDate()).toLocaleString('ar-EG', { dateStyle: 'short', timeStyle: 'short' }) : 'مسودّة',
+              link: data.url,
+              read: true, // We treat global as "seen" easily for now
+              isGlobal: true
+            });
+          });
+        }
+      } catch (err) {
+        console.error("Error fetching global notifications:", err);
+      }
+
+      if (allNotifs.length === 0) {
+        list.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-dim)">
+          <div style="font-size:2rem; margin-bottom:10px; opacity:0.3;">📭</div>
+          لا توجد إشعارات حالياً.
+        </div>`;
+        return;
+      }
+
+      // Sort chronological
+      // We need a stable date for sorting
+      allNotifs.sort((a, b) => {
+        const da = a.isGlobal ? new Date(a.date) : new Date(a.id); // Simple hack or we add timestamp to all
+        const db = b.isGlobal ? new Date(b.date) : new Date(b.id);
+        return db - da; 
+      });
+
+      list.innerHTML = allNotifs.map(n => {
+        let icon = n.isGlobal ? 'fa-bullhorn' : 'fa-info-circle';
+        if (n.type === 'success') icon = 'fa-check-circle';
+        if (n.type === 'error') icon = 'fa-times-circle';
+
+        const color = n.isGlobal ? '#818cf8' : (n.type === 'success' ? '#34d399' : n.type === 'error' ? '#f87171' : 'var(--primary-light)');
+        const bg = n.isGlobal ? 'rgba(129,140,248,0.1)' : (n.type === 'success' ? 'rgba(52,211,153,0.1)' : n.type === 'error' ? 'rgba(248,113,113,0.1)' : 'rgba(124,58,237,0.1)');
+        
+        return `
+        <div class="notif-item ${n.read ? 'read' : 'unread'}" onclick="window.openNotifModal('${n.id}', ${n.isGlobal})" style="cursor:pointer">
+          <div class="notif-icon" style="background:${bg}; color:${color}">
+            <i class="fas ${icon}"></i>
+          </div>
+          <div class="notif-content">
+            <div class="notif-header" style="justify-content:space-between">
+              <strong class="notif-title">${n.title} ${n.isGlobal ? '<span style="font-size:0.6rem; background:rgba(255,255,255,0.05); padding:2px 6px; border-radius:4px; margin-right:5px; color:var(--text-dim)">عام</span>' : ''}</strong>
+              <span class="notif-date">${n.date}</span>
+            </div>
+            <div class="notif-message" style="display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${n.message}</div>
+          </div>
+          ${!n.read ? `<div class="notif-dot"></div>` : ''}
+        </div>
+      `;
+      }).join('');
+
+      if (typeof updateNotificationBadge === 'function') updateNotificationBadge();
+    }
+
+    function sendTestNotification() {
+      const user = getCurrentUser();
+      if (!user || !user.name) return;
+      if (typeof addNotification === 'function') {
+        // Added dummy link for testing the "Watch Video" button
+        addNotification(user.name, 'success', 'إشعار تجريبي', 'هذا الإشعار لتأكيد عمل النظام في حسابك بنجاح.', 'index.html');
+        renderNotifications();
+        if (typeof showToast === 'function') {
+          showToast('تم إرسال إشعار تجريبي بنجاح', 'success');
+        }
+      }
+    }
+
+    window.openNotifModal = async function (id, isGlobal = false) {
+      const user = getCurrentUser();
+      if (!user || !user.name) return;
+
+      let n;
+      if (isGlobal) {
+        try {
+          const doc = await db.collection('broadcast_notifications').doc(id.replace('global_', '')).get();
+          if (doc.exists) {
+            const data = doc.data();
+            n = {
+              title: data.title,
+              message: data.body,
+              date: data.timestamp ? new Date(data.timestamp.toDate()).toLocaleString('ar-EG', { dateStyle: 'short', timeStyle: 'short' }) : 'مسودّة',
+              link: data.url,
+              type: 'info',
+              isGlobal: true
+            };
+          }
+        } catch (e) {
+          console.error("Error opening global notif:", e);
+        }
+      } else {
+        const notifs = getNotifications(user.name.trim());
+        n = notifs.find(x => String(x.id) === String(id));
+        if (n) {
+          markNotificationRead(user.name.trim(), parseFloat(id));
+          renderNotifications();
+        }
+      }
+
+      if (!n) return;
+
+      const configs = {
+        success: { color: '#34d399', bg: 'rgba(52,211,153,0.15)', icon: 'fa-check-circle' },
+        error: { color: '#f87171', bg: 'rgba(248,113,113,0.15)', icon: 'fa-times-circle' },
+        info: { color: n.isGlobal ? '#818cf8' : 'var(--primary-light)', bg: n.isGlobal ? 'rgba(129,140,248,0.15)' : 'rgba(124,58,237,0.15)', icon: n.isGlobal ? 'fa-bullhorn' : 'fa-info-circle' }
+      };
+      const cfg = configs[n.type] || configs.info;
+
+      const iconEl = document.getElementById('notif-modal-icon');
+      if (iconEl) {
+        iconEl.style.background = cfg.bg;
+        iconEl.style.color = cfg.color;
+        iconEl.innerHTML = `<i class="fas ${cfg.icon}"></i>`;
+      }
+
+      const titleEl = document.getElementById('notif-modal-title-text');
+      if (titleEl) titleEl.textContent = n.title;
+
+      const msgEl = document.getElementById('notif-modal-message');
+      if (msgEl) msgEl.textContent = n.message;
+
+      const dateEl = document.getElementById('notif-modal-date');
+      if (dateEl) dateEl.textContent = n.date;
+
+      const watchBtn = document.getElementById('notif-modal-watch-btn');
+      if (watchBtn) {
+        if (n.link && n.link.trim() && n.link !== '#') {
+          watchBtn.style.display = 'flex';
+          watchBtn.innerHTML = `<i class="fas fa-external-link-alt"></i> ${n.isGlobal ? 'انتقال للرابط' : 'مشاهدة الآن'}`;
+          watchBtn.onclick = () => window.location.href = n.link;
+        } else {
+          watchBtn.style.display = 'none';
+        }
+      }
+
+      const box = document.querySelector('#notif-detail-modal .gv-modal-box');
+      if (box) box.style.borderTop = `3px solid ${cfg.color}`;
+
+      const modal = document.getElementById('notif-detail-modal');
+      if (modal) {
+        modal.style.display = 'flex';
+        setTimeout(() => modal.classList.add('show'), 10);
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeNotifModal(e) {
+      const modal = document.getElementById('notif-detail-modal');
+      if (e && e.target !== modal && !e.target.classList.contains('gv-modal-close')) return;
+      if (modal) {
+        modal.classList.remove('show');
+        setTimeout(() => modal.style.display = 'none', 300);
+        document.body.style.overflow = '';
+      }
+    }
+
+    function markAsRead(id) {
+      const user = getCurrentUser();
+      markNotificationRead(user.name, parseFloat(id));
+      renderNotifications();
+    }
+
+    function clearAllNotifications() {
+      if (!confirm('هل تريد مسح جميع الإشعارات؟')) return;
+      const user = getCurrentUser();
+      if (!user || !user.name) return;
+      const name = user.name.trim();
+      try {
+        const all = JSON.parse(localStorage.getItem('gv_notifications') || '{}');
+        if (all[name]) {
+          all[name] = [];
+          localStorage.setItem('gv_notifications', JSON.stringify(all));
+          renderNotifications();
+        }
+      } catch (e) { console.error("clearAllNotifications Error:", e); }
+    }
+
+    window.addEventListener('firebaseDataReady', () => {
+      setTimeout(renderNotifications, 100);
+    });
+  </script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/notifications.js?v=1.1"></script>
+  <script src="js/firebase-sync.js"></script>
+</body>
+
+</html>
